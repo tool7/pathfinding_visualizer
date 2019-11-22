@@ -1,0 +1,13 @@
+body {
+  font-family: "Inconsolata";
+  color: $color-black;
+}
+
+a {
+  text-decoration: none;
+}
+
+::selection {
+  background-color: $color-grey;
+  color: white;
+}

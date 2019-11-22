@@ -1,0 +1,47 @@
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+html {
+  // To set 1rem to be equal 10px
+  font-size: 62.5%;
+}
+
+body {
+  box-sizing: border-box;
+  height: 100vh;
+  background-color: #fefefe;
+}
+
+input,
+button {
+  border: none;
+  outline: none;
+  font-family: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+#app {
+  @include phone {
+    margin: 0 4rem;
+  }
+
+  @include tablet {
+    margin: 0 10rem;
+  }
+
+  @include desktop {
+    margin: 0 20rem;
+  }
+
+  @include large-desktop {
+    margin: 0 40rem;
+  }
+}

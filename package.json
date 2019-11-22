@@ -1,0 +1,36 @@
+{
+  "name": "algorithm_visualizer",
+  "version": "1.0.0",
+  "description": "Algorithm visualizer web app",
+  "main": "index.js",
+  "scripts": {
+    "webpack:watch": "webpack --watch",
+    "prod:build": "webpack -p",
+    "dev:server": "cd dist & live-server --host=localhost --entry-file=index.html",
+    "dev": "npm-run-all -p webpack:watch dev:server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tool7/algorithm_visualizer.git"
+  },
+  "author": "Marko Roje",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tool7/algorithm_visualizer/issues"
+  },
+  "homepage": "https://github.com/tool7/algorithm_visualizer#readme",
+  "devDependencies": {
+    "copy-webpack-plugin": "^5.0.5",
+    "css-loader": "^3.2.0",
+    "live-server": "^1.2.1",
+    "mini-css-extract-plugin": "^0.8.0",
+    "node-sass": "^4.13.0",
+    "npm-run-all": "^4.1.5",
+    "sass-loader": "^8.0.0",
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.7.2",
+    "url-loader": "^2.2.0",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
+  }
+}

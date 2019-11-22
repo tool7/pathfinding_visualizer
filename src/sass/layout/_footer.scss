@@ -1,0 +1,10 @@
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  padding: 1rem;
+  background: radial-gradient(white 0%, #eeeeee 100%);
+  color: $color-black;
+  font-size: $font-size-xs;
+  text-align: center;
+}
