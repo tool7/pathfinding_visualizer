@@ -28,20 +28,7 @@ button {
   cursor: pointer;
 }
 
-#app {
-  @include phone {
-    margin: 0 4rem;
-  }
-
-  @include tablet {
-    margin: 0 10rem;
-  }
-
-  @include desktop {
-    margin: 0 20rem;
-  }
-
-  @include large-desktop {
-    margin: 0 40rem;
-  }
+table {
+  border-spacing: 0;
+  border-collapse: collapse;
 }

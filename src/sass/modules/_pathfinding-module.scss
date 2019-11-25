@@ -1,3 +1,15 @@
-#pathfinding-module {
-  
+.pathfinding-module {
+  &__title {
+    margin-bottom: 3rem;
+  }
+}
+
+.tile {
+  &--unvisited {
+    border: 1px solid lightslategray;
+  }
+
+  &--wall {
+    background-color: darkblue;
+  }
 }

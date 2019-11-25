@@ -1,5 +1,5 @@
-import PathfindingModule from "./modules/pathfinding-module";
-import SortingModule from "./modules/sorting-module";
+import PathfindingModule from "./modules/pathfinding/pathfinding-module";
+import SortingModule from "./modules/sorting/sorting-module";
 
 class Router extends EventTarget {
 
@@ -14,6 +14,7 @@ class Router extends EventTarget {
       return Router.instance;
     }
     super();
+    Router.instance = this;
 
     const pathfindingModule = new PathfindingModule();
     const sortingModule = new SortingModule();
@@ -30,9 +31,6 @@ class Router extends EventTarget {
       this.loadModule(route);
       this.dispatchEvent(new Event("navigation:end"));
     };
-    
-    if (!!Router.instance) { return; }
-    Router.instance = this;
   }
 
   loadModule(route: string) {
