@@ -4,6 +4,7 @@ class Grid {
 
   tiles: Tile[][];
   isMouseDown: boolean = false;
+  isCtrlKeyDown: boolean = false;
   parentElementBoundingRect: ClientRect;
 
   parent: HTMLElement;
@@ -27,6 +28,8 @@ class Grid {
 
     this.createGrid();
 
+    document.addEventListener("keydown", e => this.onKeyDown(e));
+    document.addEventListener("keyup", e => this.onKeyUp(e));
     this.parent.addEventListener("mousedown", e => this.onMouseDown(e));
     this.parent.addEventListener("mouseup", e => this.onMouseUp(e));
     this.parent.addEventListener("mousemove", e => this.onMouseMove(e));
@@ -67,6 +70,18 @@ class Grid {
     this.isMouseDown = false;
   }
 
+  private onKeyDown(e: KeyboardEvent) {
+    if (e.keyCode === 17) {
+      this.isCtrlKeyDown = true;
+    }
+  }
+
+  private onKeyUp(e: KeyboardEvent) {
+    if (e.keyCode === 17) {
+      this.isCtrlKeyDown = false;
+    }
+  }
+
   private onMouseMove(e: MouseEvent) {
     if (!this.isMouseDown) { return; }
 
@@ -86,7 +101,8 @@ class Grid {
     }
 
     if (foundTile) {
-      this.changeTileState(foundTile, TileState.Wall);
+      const newState = this.isCtrlKeyDown ? TileState.Unvisited : TileState.Wall;
+      this.changeTileState(foundTile, newState);
     }
   }
 
@@ -106,14 +122,8 @@ class Grid {
   }
 
   private onTileClick(tile: Tile) {
-    switch (tile.state) {
-      case TileState.Unvisited:
-        this.changeTileState(tile, TileState.Wall);
-        break;
-      case TileState.Wall:
-        this.changeTileState(tile, TileState.Unvisited);
-        break;
-    }
+    const newState = this.isCtrlKeyDown ? TileState.Unvisited : TileState.Wall;
+    this.changeTileState(tile, newState);
   }
 }
 
