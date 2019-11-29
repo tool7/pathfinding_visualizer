@@ -1,8 +1,8 @@
 import Queue from "../../queue";
 import HashMap from "../../hash-map";
-import { GridGraph, GridNode } from "../../grid-graph";
+import { Graph } from "../../graph";
 
-function breadthFirstSearch(graph: GridGraph, start: GridNode, goal: GridNode) {
+function breadthFirstSearch(graph: Graph, start: any, goal: any): any[] {
   let frontier = new Queue();
   let cameFrom = new HashMap();
   let path = [];
@@ -15,7 +15,8 @@ function breadthFirstSearch(graph: GridGraph, start: GridNode, goal: GridNode) {
 
     if (graph.areEqual(current, goal)) { break; }
 
-    graph.neighbours(current).forEach((next: any) => {
+    graph.neighbors(current).forEach((next: any) => {
+      // Checking if it is already visited node
       if (cameFrom.contains(next)) { return; }
 
       frontier.enqueue(next);
@@ -32,3 +33,5 @@ function breadthFirstSearch(graph: GridGraph, start: GridNode, goal: GridNode) {
 
   return path.reverse();
 }
+
+export default breadthFirstSearch;

@@ -3,7 +3,7 @@ class HashMap {
   items: any;
 
   constructor() {
-    this.items = [];
+    this.items = {};
   }
 
   private getIndex(key: any): string {
@@ -11,21 +11,21 @@ class HashMap {
   }
 
   set(key: any, value: any): void {
-    if (!key || !value) { return; }
+    if (!key) { throw "HashMap: set(key) - invalid key"; }
 
     const index = this.getIndex(key);
     this.items[index] = value;
   }
 
   get(key: any): any {
-    if (!key) { return null; }
+    if (!key) { throw "HashMap: get(key) - invalid key"; }
 
     const index = this.getIndex(key);
     return this.items[index];
   }
 
   contains(key: any): boolean {
-    if (!key) { return false; }
+    if (!key) { throw "HashMap: contains(key) - invalid key"; }
 
     const index = this.getIndex(key);
     const item = this.items[index];
