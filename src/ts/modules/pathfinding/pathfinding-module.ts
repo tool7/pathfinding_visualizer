@@ -3,6 +3,11 @@ import Grid from "./grid";
 import { GridTileCount } from "../../config/grid-config";
 import { getNumberFactors } from "../../helpers/number";
 
+// Algorithms
+import breadthFirstSearch from "../../algorithms/pathfinding/breadth-first-search/breadth-first-search";
+import { Graph } from "../../algorithms/pathfinding/graph";
+import { Tile } from "./tile";
+
 class PathfindingModule {
 
   static instance: any;
@@ -22,6 +27,27 @@ class PathfindingModule {
 
   init() {
     this.createGrid();
+
+
+    // TODO: Testing purpose
+    const start = { x: 5, y: 10 };
+    const goal = { x: 40, y: 30 };
+    const tiles = this.grid!.tiles;
+    const nodes: any[][] = [];
+
+    // TODO: Map Tile states to GridNodes
+    for (let i = 0; i < this.grid!.horizontalCount; i++) {
+      nodes[i] = [];
+
+      for (let j = 0; j < this.grid!.verticalCount; j++) {
+        nodes[i][j] = { x: i, y: j };
+      }
+    }
+
+    const graph = new Graph(nodes, this.grid!.horizontalCount, this.grid!.verticalCount);
+    const shortestPath = breadthFirstSearch(graph, start, goal);
+
+    console.log(shortestPath);
   }
 
   private createGrid() {

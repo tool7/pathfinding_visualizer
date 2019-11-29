@@ -1,6 +1,6 @@
-import Queue from "../../queue";
-import HashMap from "../../hash-map";
-import { Graph } from "../../graph";
+import Queue from "../queue";
+import HashMap from "../hash-map";
+import { Graph } from "../graph";
 
 function breadthFirstSearch(graph: Graph, start: any, goal: any): any[] {
   let frontier = new Queue();
