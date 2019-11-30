@@ -29,8 +29,10 @@ function dijkstraAlgorithm(graph: WeightedGraph, start: Node, goal: Node): Pathf
       // previously calculated cost to "next"
       if (!costSoFar.contains(next) || newCost < costSoFar.get(next)) {
         costSoFar.set(next, newCost);
-        frontier.enqueue(next, newCost);  // Using new cost as priority
         cameFrom.set(next, current);
+
+        const priority = newCost;
+        frontier.enqueue(next, priority);
       }
     });
   }
@@ -46,4 +48,4 @@ function dijkstraAlgorithm(graph: WeightedGraph, start: Node, goal: Node): Pathf
   return { path, visited };
 }
 
-export default dijkstra;
+export default dijkstraAlgorithm;

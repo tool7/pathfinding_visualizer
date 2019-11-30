@@ -24,8 +24,8 @@ function breadthFirstSearch(graph: Graph, start: Node, goal: Node): PathfindingR
       // Checking if it is already visited node
       if (cameFrom.contains(next)) { return; }
 
-      frontier.enqueue(next);
       cameFrom.set(next, current);
+      frontier.enqueue(next);
     });
   }
 

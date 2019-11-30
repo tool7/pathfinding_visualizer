@@ -29,10 +29,10 @@ function greedyBestFirstSearch(graph: WeightedGraph, start: Node, goal: Node): P
       // Checking if it is already visited node
       if (cameFrom.contains(next)) { return; }
 
+      cameFrom.set(next, current);
+
       const priority = heuristic(next, goal);
       frontier.enqueue(next, priority);
-      
-      cameFrom.set(next, current);
     });
   }
 
