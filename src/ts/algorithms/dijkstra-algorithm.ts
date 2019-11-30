@@ -1,14 +1,9 @@
-import PriorityQueue from "../priority-queue";
-import HashMap from "../hash-map";
-import PathfindingResult from "../pathfinding-result";
-import { WeightedGraph, Node } from "../graph";
+import PriorityQueue from "../models/priority-queue";
+import HashMap from "../models/hash-map";
+import PathfindingResult from "../models/pathfinding-result";
+import { WeightedGraph, Node } from "../models/graph";
 
-// Heuristic function that tells us how close we are to the goal
-function heuristic(nodeA: Node, nodeB: Node): number {
-  return Math.abs(nodeA.x - nodeB.x) + Math.abs(nodeA.y - nodeB.y);
-}
-
-function aStarSearch(graph: WeightedGraph, start: Node, goal: Node): PathfindingResult {
+function dijkstraAlgorithm(graph: WeightedGraph, start: Node, goal: Node): PathfindingResult {
   let frontier = new PriorityQueue<Node>();
   let cameFrom = new HashMap();
   let costSoFar = new HashMap();
@@ -36,7 +31,7 @@ function aStarSearch(graph: WeightedGraph, start: Node, goal: Node): Pathfinding
         costSoFar.set(next, newCost);
         cameFrom.set(next, current);
 
-        const priority = newCost + heuristic(next, goal);
+        const priority = newCost;
         frontier.enqueue(next, priority);
       }
     });
@@ -53,4 +48,4 @@ function aStarSearch(graph: WeightedGraph, start: Node, goal: Node): Pathfinding
   return { path, visited };
 }
 
-export default aStarSearch;
+export default dijkstraAlgorithm;

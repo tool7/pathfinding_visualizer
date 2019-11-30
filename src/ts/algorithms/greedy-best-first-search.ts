@@ -1,7 +1,7 @@
-import PriorityQueue from "../priority-queue";
-import HashMap from "../hash-map";
-import PathfindingResult from "../pathfinding-result";
-import { WeightedGraph, Node } from "../graph";
+import PriorityQueue from "../models/priority-queue";
+import HashMap from "../models/hash-map";
+import PathfindingResult from "../models/pathfinding-result";
+import { WeightedGraph, Node } from "../models/graph";
 
 // Heuristic function that tells us how close we are to the goal
 function heuristic(nodeA: Node, nodeB: Node): number {

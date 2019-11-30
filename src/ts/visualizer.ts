@@ -1,26 +1,25 @@
-import Grid from "./grid";
-import { TileState } from "./tile";
-import PathfindingResult from "../../algorithms/pathfinding/pathfinding-result";
-import { Node } from "../../algorithms/pathfinding/graph";
-import Queue from "../../algorithms/pathfinding/queue";
+import Grid from "./models/grid";
+import { TileState } from "./models/tile";
+import PathfindingResult from "./models/pathfinding-result";
+import { Node } from "./models/graph";
+import Queue from "./models/queue";
 
 class Visualizer {
 
   static get isRunning(): boolean {
-    return this._isRunning;
+    return Visualizer._isRunning;
   };
 
   private static _isRunning: boolean = false;
   private static _intervalId: number;
 
   private static simulateTiles(nodeQueue: Queue<Node>, grid: Grid, newTileState: TileState, simulationStepDelay: number, completeCallback?: () => void) {
-    this._intervalId = setInterval(() => {
+    Visualizer._intervalId = setInterval(() => {
       const nextNode = nodeQueue.dequeue();
 
       if (!nextNode) {
-        clearInterval(this._intervalId);
+        clearInterval(Visualizer._intervalId);
         completeCallback && completeCallback();
-        Visualizer._isRunning = false;
         return;
       }
 
@@ -42,14 +41,16 @@ class Visualizer {
     const visitedQueue = new Queue<Node>(pathfindingResult.visited);
     const pathQueue = new Queue<Node>(pathfindingResult.path);
 
-    this.simulateTiles(visitedQueue, grid, TileState.Visited, simulationStepDelay, () => {
-      this.simulateTiles(pathQueue, grid, TileState.Path, 40);
+    Visualizer.simulateTiles(visitedQueue, grid, TileState.Visited, simulationStepDelay, () => {
+      Visualizer.simulateTiles(pathQueue, grid, TileState.Path, 40, () => {
+        Visualizer._isRunning = false;
+      });
     });
   }
 
   static clear(grid: Grid) {
-    clearInterval(this._intervalId);
-    this._isRunning = false;
+    clearInterval(Visualizer._intervalId);
+    Visualizer._isRunning = false;
 
     for (let i = 0; i < grid.horizontalCount; i++) {
       for (let j = 0; j < grid.verticalCount; j++) {

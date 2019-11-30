@@ -1,7 +1,7 @@
 {
-  "name": "algorithm_visualizer",
+  "name": "pathfinding_visualizer",
   "version": "1.0.0",
-  "description": "Algorithm visualizer web app",
+  "description": "Pathfinding visualizer web app",
   "main": "index.js",
   "scripts": {
     "webpack:watch": "webpack --watch",
@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tool7/algorithm_visualizer.git"
+    "url": "git+https://github.com/tool7/pathfinding_visualizer.git"
   },
   "author": "Marko Roje",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/tool7/algorithm_visualizer/issues"
+    "url": "https://github.com/tool7/pathfinding_visualizer/issues"
   },
-  "homepage": "https://github.com/tool7/algorithm_visualizer#readme",
+  "homepage": "https://github.com/tool7/pathfinding_visualizer#readme",
   "devDependencies": {
     "copy-webpack-plugin": "^5.0.5",
     "css-loader": "^3.2.0",

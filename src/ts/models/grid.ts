@@ -1,5 +1,5 @@
 import { Tile, TileState } from "./tile";
-import Visualizer from "./visualizer";
+import Visualizer from "../visualizer";
 
 class Grid {
 

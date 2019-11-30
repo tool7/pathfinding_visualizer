@@ -8,7 +8,7 @@ module.exports = {
   mode: env,
   entry: [
     "./src/sass/main.scss",
-    "./src/ts/index.ts",
+    "./src/ts/app.ts",
   ],
   output: {
     filename: "bundle.js",

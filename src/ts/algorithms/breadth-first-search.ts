@@ -1,7 +1,7 @@
-import Queue from "../queue";
-import HashMap from "../hash-map";
-import PathfindingResult from "../pathfinding-result";
-import { Graph, Node } from "../graph";
+import Queue from "../models/queue";
+import HashMap from "../models/hash-map";
+import PathfindingResult from "../models/pathfinding-result";
+import { Graph, Node } from "../models/graph";
 
 function breadthFirstSearch(graph: Graph, start: Node, goal: Node): PathfindingResult {
   let frontier = new Queue<Node>();

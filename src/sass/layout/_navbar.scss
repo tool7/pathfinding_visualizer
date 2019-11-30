@@ -3,21 +3,4 @@
   justify-content: center;
   padding: 1rem;
   background: radial-gradient(white 0%, #eeeeee 100%);
-  
-  &__route-btn {
-    position: relative;
-    font-size: $font-size-sm;
-    color: $color-black;
-    padding: .5rem 1rem;
-    font-weight: bold;
-    
-    &:not(:last-child) {
-      margin-right: 2rem;
-    }
-
-    &:hover, &--active {
-      cursor: pointer;
-      color: $color-black;
-    }
-  }
 }
