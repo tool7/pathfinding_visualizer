@@ -1,11 +1,11 @@
-interface Element {
-  item: any;
+interface Element<T> {
+  item: T;
   priority: number;
 }
 
-class PriorityQueue {
+class PriorityQueue<T> {
 
-  elements: Element[];
+  elements: Element<T>[];
 
   constructor() {
     this.elements = [];
@@ -15,13 +15,13 @@ class PriorityQueue {
     return this.elements.length === 0;
   }
   
-  enqueue(item: any, priority: number): void {
+  enqueue(item: T, priority: number): void {
     this.elements.push({ item, priority });
   }
 
-  dequeue(): any {
+  dequeue(): T {
     if (this.elements.length === 0) {
-      return null;
+      return null as any;
     }
 
     let bestIndex = 0;
