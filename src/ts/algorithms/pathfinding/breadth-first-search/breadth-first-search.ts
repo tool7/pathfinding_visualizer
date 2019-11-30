@@ -1,17 +1,22 @@
 import Queue from "../queue";
 import HashMap from "../hash-map";
-import { Graph } from "../graph";
+import PathfindingResult from "../pathfinding-result";
+import { Graph, Node } from "../graph";
 
-function breadthFirstSearch(graph: Graph, start: any, goal: any): any[] {
-  let frontier = new Queue();
+function breadthFirstSearch(graph: Graph, start: Node, goal: Node): PathfindingResult {
+  let frontier = new Queue<Node>();
   let cameFrom = new HashMap();
-  let path = [];
+  let visited: Node[] = [];
+  let path: Node[] = [];
 
   frontier.enqueue(start);
   cameFrom.set(start, null);
 
   while (!frontier.isEmpty()) {
     const current = frontier.dequeue();
+
+    // Adding to visited array only because of visualization
+    visited.push(current);
 
     if (graph.areEqual(current, goal)) { break; }
 
@@ -30,8 +35,9 @@ function breadthFirstSearch(graph: Graph, start: any, goal: any): any[] {
     path.push(current);
     current = cameFrom.get(current);
   }
+  path.reverse();
 
-  return path.reverse();
+  return { path, visited };
 }
 
 export default breadthFirstSearch;

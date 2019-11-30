@@ -1,22 +1,22 @@
-class Queue {
+class Queue<T> {
 
-  elements: any[];
+  elements: T[];
 
-  constructor() {
-    this.elements = [];
+  constructor(initialElements: T[] = []) {
+    this.elements = initialElements;
   }
 
   isEmpty() {
     return this.elements.length === 0;
   }
 
-  enqueue(item: any): void {
+  enqueue(item: T): void {
     this.elements.push(item);
   }
 
-  dequeue(): any {
+  dequeue(): T {
     if (this.elements.length === 0) {
-      return null;
+      return null as any;
     }
 
     let item = this.elements[0];

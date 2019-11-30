@@ -1,6 +1,7 @@
 interface Node {
   x: number;
   y: number;
+  isWall: boolean;
 }
 
 class Graph {
@@ -31,6 +32,7 @@ class Graph {
       result.push(this.nodes[node.x][node.y - 1]);
     }
 
+    result = result.filter(n => !n.isWall);
     return result;
   }
 
@@ -41,10 +43,13 @@ class Graph {
   areEqual(nodeA: Node, nodeB: Node): boolean {
     return nodeA.x === nodeB.x && nodeA.y === nodeB.y;
   }
+}
+
+class WeightedGraph extends Graph {
 
   cost(fromNode: Node, toNode: Node): number {
     return 1;
   }
 }
 
-export { Graph, Node };
+export { Graph, WeightedGraph, Node };

@@ -5,49 +5,28 @@ import { getNumberFactors } from "../../helpers/number";
 
 // Algorithms
 import breadthFirstSearch from "../../algorithms/pathfinding/breadth-first-search/breadth-first-search";
-import { Graph } from "../../algorithms/pathfinding/graph";
-import { Tile } from "./tile";
+import Visualizer from "./visualizer";
+import { Graph, WeightedGraph } from "../../algorithms/pathfinding/graph";
+import { Tile, TileState } from "./tile";
 
 class PathfindingModule {
 
   static instance: any;
 
   grid: Grid | null = null;
+  visualizer: Visualizer | null = null;
+  visualizeToggleButton: HTMLButtonElement | null = null;
 
   constructor() {
     if (!!PathfindingModule.instance) {
       return PathfindingModule.instance;
     }
     PathfindingModule.instance = this;
-
-    Router.instance.addEventListener("navigation:end", () => {    
-      this.grid = null;
-    });
   }
 
   init() {
     this.createGrid();
-
-
-    // TODO: Testing purpose
-    const start = { x: 5, y: 10 };
-    const goal = { x: 40, y: 30 };
-    const tiles = this.grid!.tiles;
-    const nodes: any[][] = [];
-
-    // TODO: Map Tile states to GridNodes
-    for (let i = 0; i < this.grid!.horizontalCount; i++) {
-      nodes[i] = [];
-
-      for (let j = 0; j < this.grid!.verticalCount; j++) {
-        nodes[i][j] = { x: i, y: j };
-      }
-    }
-
-    const graph = new Graph(nodes, this.grid!.horizontalCount, this.grid!.verticalCount);
-    const shortestPath = breadthFirstSearch(graph, start, goal);
-
-    console.log(shortestPath);
+    this.initControls();
   }
 
   private createGrid() {
@@ -83,10 +62,50 @@ class PathfindingModule {
     this.grid = new Grid(gridElement, tileSize, xAxisTileCount, yAxisTileCount);
   }
 
+  private initControls() {
+    this.visualizeToggleButton = document.getElementById("pathfinding-visualize-toggle-btn") as HTMLButtonElement;
+    this.visualizeToggleButton.addEventListener("click", () => this.onVisualizeButtonClick())
+  }
+
+  private onVisualizeButtonClick() {
+    if (this.visualizeToggleButton!.classList.contains("cancel")) {
+      Visualizer.clear(this.grid!);
+
+      this.visualizeToggleButton!.innerHTML = "Visualize";
+      this.visualizeToggleButton!.className = "start";
+      return;
+    }
+
+    // TODO: Testing purpose (EXTRACT SOMEWHERE)
+    const start = { x: 5, y: 10, isWall: false };
+    const goal = { x: 40, y: 30, isWall: false };
+    const tiles = this.grid!.tiles;
+    const nodes: any[][] = [];
+
+    for (let i = 0; i < this.grid!.horizontalCount; i++) {
+      nodes[i] = [];
+
+      for (let j = 0; j < this.grid!.verticalCount; j++) {
+        const isWall = tiles[i][j].state === TileState.Wall;
+        nodes[i][j] = { x: i, y: j, isWall };
+      }
+    }
+
+    const graph = new WeightedGraph(nodes, this.grid!.horizontalCount, this.grid!.verticalCount);
+    const searchResult = breadthFirstSearch(graph, start, goal);
+
+    Visualizer.simulate(this.grid!, searchResult, 10);
+
+    this.visualizeToggleButton!.innerHTML = "Cancel simulation";
+    this.visualizeToggleButton!.className = "cancel";
+  }
+
   get content() {
     return `
       <div class="pathfinding-module">
         <h1 class="pathfinding-module__title">Pathfinding module content</h1>
+
+        <button id="pathfinding-visualize-toggle-btn" class="start">Visualize</button>
 
         <table>
           <tbody id="grid"></tbody>

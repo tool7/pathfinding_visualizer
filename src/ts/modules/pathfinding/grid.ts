@@ -1,14 +1,15 @@
 import { Tile, TileState } from "./tile";
+import Visualizer from "./visualizer";
 
 class Grid {
 
-  tiles: Tile[][];
-  isMouseDown: boolean = false;
-  isCtrlKeyDown: boolean = false;
-  parentElementBoundingRect: ClientRect;
+  private isMouseDown: boolean = false;
+  private parent: HTMLElement;
+  private tileSize: number;
+  private isCtrlKeyDown: boolean = false;
+  private parentElementBoundingRect: ClientRect;
 
-  parent: HTMLElement;
-  tileSize: number;
+  tiles: Tile[][];
   horizontalCount: number;
   verticalCount: number;
 
@@ -19,6 +20,8 @@ class Grid {
     this.horizontalCount = horizontalCount;
     this.verticalCount = verticalCount;
 
+    // TODO: Implemented positioning of start and goal tiles
+
     this.parentElementBoundingRect = parent.getBoundingClientRect();
     this.tiles = Array
       .from({ length: this.horizontalCount },
@@ -27,6 +30,7 @@ class Grid {
         );
 
     this.createGrid();
+    this.initStartAndGoalTiles();
 
     document.addEventListener("keydown", e => this.onKeyDown(e));
     document.addEventListener("keyup", e => this.onKeyUp(e));
@@ -45,7 +49,7 @@ class Grid {
 
         tileEl.style.width = `${this.tileSize.toString()}px`;
         tileEl.style.height = `${this.tileSize.toString()}px`;
-        tileEl.classList.add("tile--unvisited");
+        tileEl.className = "tile tile--unvisited";
 
         const tileX = i * this.tileSize;
         const tileY = j * this.tileSize;
@@ -58,6 +62,14 @@ class Grid {
 
       this.parent.appendChild(rowEl);
     }
+  }
+
+  private initStartAndGoalTiles() {
+    const startTile = this.tiles[5][10];
+    const goalTile = this.tiles[40][30];
+
+    this.setTileState(startTile, TileState.Start);
+    this.setTileState(goalTile, TileState.Goal);
   }
 
   private onMouseDown(e: MouseEvent) {
@@ -83,7 +95,7 @@ class Grid {
   }
 
   private onMouseMove(e: MouseEvent) {
-    if (!this.isMouseDown) { return; }
+    if (!this.isMouseDown || Visualizer.isRunning) { return; }
 
     const mouseX = e.x - this.parentElementBoundingRect.left;
     const mouseY = e.y - this.parentElementBoundingRect.top;
@@ -100,30 +112,45 @@ class Grid {
       }
     }
 
-    if (foundTile) {
+    if (foundTile && foundTile.state !== TileState.Start && foundTile.state !== TileState.Goal) {
       const newState = this.isCtrlKeyDown ? TileState.Unvisited : TileState.Wall;
-      this.changeTileState(foundTile, newState);
-    }
-  }
-
-  private changeTileState(tile: Tile, newState: TileState) {
-    tile.state = newState;
-
-    switch (newState) {
-      case TileState.Wall:
-        tile.htmlEl.classList.remove("tile--unvisited"); // TODO: Remove all classes instead
-        tile.htmlEl.classList.add("tile--wall");
-        break;
-      case TileState.Unvisited:
-        tile.htmlEl.classList.remove("tile--wall");
-        tile.htmlEl.classList.add("tile--unvisited");
-        break;
+      this.setTileState(foundTile, newState);
     }
   }
 
   private onTileClick(tile: Tile) {
+    if (Visualizer.isRunning || tile.state === TileState.Start || tile.state === TileState.Goal) {
+      return;
+    }
+
     const newState = this.isCtrlKeyDown ? TileState.Unvisited : TileState.Wall;
-    this.changeTileState(tile, newState);
+    this.setTileState(tile, newState);
+  }
+
+  setTileState(tile: Tile, newState: TileState) {
+    tile.state = newState;
+    tile.htmlEl.className = "tile";
+
+    switch (newState) {
+      case TileState.Wall:
+        tile.htmlEl.classList.add("tile--wall");
+        break;
+      case TileState.Visited:
+        tile.htmlEl.classList.add("tile--visited");
+        break;
+      case TileState.Unvisited:
+        tile.htmlEl.classList.add("tile--unvisited");
+        break;
+      case TileState.Start:
+        tile.htmlEl.classList.add("tile--start");
+        break;
+      case TileState.Goal:
+        tile.htmlEl.classList.add("tile--goal");
+        break;
+      case TileState.Path:
+        tile.htmlEl.classList.add("tile--path");
+        break;
+    }
   }
 }
 
