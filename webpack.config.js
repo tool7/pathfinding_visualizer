@@ -7,7 +7,7 @@ const env = process.env.NODE_ENV || "development";
 module.exports = {
   mode: env,
   entry: [
-    "./src/sass/main.scss",
+    "./src/scss/main.scss",
     "./src/ts/app.ts",
   ],
   output: {

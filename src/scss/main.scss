@@ -1,0 +1,26 @@
+@import "utils/mixins";
+@import "utils/variables";
+
+@import "base/base";
+@import "base/typography";
+
+@import "layout/navbar";
+@import "layout/footer";
+
+@import "components/grid";
+
+#app-container {}
+
+#visualize-toggle-btn {
+  height: 4rem;
+  width: 12rem;
+  color: whitesmoke;
+
+  &.start {
+    background-color: green;
+  }
+
+  &.cancel {
+    background-color: orangered;
+  }
+}

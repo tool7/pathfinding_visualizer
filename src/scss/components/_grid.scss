@@ -1,31 +1,4 @@
-@import "utils/mixins";
-@import "utils/variables";
-
-@import "base/base";
-@import "base/typography";
-
-@import "layout/navbar";
-@import "layout/footer";
-
-#app-container {}
-
-#visualize-toggle-btn {
-  height: 4rem;
-  width: 12rem;
-  color: whitesmoke;
-
-  &.start {
-    background-color: green;
-  }
-
-  &.cancel {
-    background-color: orangered;
-  }
-}
-
 .tile {
-  border: 1px solid whitesmoke;
-
   &--start {
     background-color: green;
   }
@@ -47,6 +20,7 @@
 
   &--visited {
     background-color: yellowgreen;
+    border: 1px solid whitesmoke;
     animation-name: visitedTileAnimation;
     animation-duration: .5s;
     animation-timing-function: ease-out;
