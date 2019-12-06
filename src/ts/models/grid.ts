@@ -100,8 +100,9 @@ class Grid {
     const mouseX = e.x - this.parentElementBoundingRect.left;
     const mouseY = e.y - this.parentElementBoundingRect.top;
 
+    // TODO: Optimize
     let foundTile = null;
-    for (let i = 0; i < this.horizontalCount; i++) {      
+    for (let i = 0; i < this.horizontalCount; i++) {
       for (let j = 0; j < this.verticalCount; j++) {
         const t = this.tiles[i][j];
 
@@ -150,6 +151,20 @@ class Grid {
       case TileState.Path:
         tile.htmlEl.classList.add("tile--path");
         break;
+    }
+  }
+
+  clearWallTiles() {
+    if (Visualizer.isRunning) { return; }
+
+    for (let i = 0; i < this.horizontalCount; i++) {
+      for (let j = 0; j < this.verticalCount; j++) {
+        const tile = this.tiles[i][j];
+
+        if (tile.state == TileState.Wall) {
+          this.setTileState(tile, TileState.Unvisited);
+        }
+      }
     }
   }
 }

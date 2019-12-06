@@ -14,6 +14,7 @@ import Visualizer from "./visualizer";
 
 let grid: Grid;
 let visualizeToggleButton: HTMLButtonElement;
+let clearWallsButton: HTMLButtonElement;
 
 initGrid();
 initControls();
@@ -54,6 +55,9 @@ function initGrid(): void {
 function initControls(): void {
   visualizeToggleButton = document.getElementById("visualize-toggle-btn") as HTMLButtonElement;
   visualizeToggleButton.addEventListener("click", onVisualizeButtonClick);
+
+  clearWallsButton = document.getElementById("clear-walls-btn") as HTMLButtonElement;
+  clearWallsButton.addEventListener("click", onClearWallsButtonClick);
 }
 
 function onVisualizeButtonClick() {
@@ -87,4 +91,8 @@ function onVisualizeButtonClick() {
 
   visualizeToggleButton!.innerHTML = "Cancel simulation";
   visualizeToggleButton!.className = "cancel";
+}
+
+function onClearWallsButtonClick() {
+  grid.clearWallTiles();
 }
