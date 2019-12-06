@@ -1,15 +1,16 @@
 import { Tile, TileState } from "./tile";
+import { Node } from "./graph";
 import Visualizer from "../visualizer";
 
 class Grid {
 
-  private isMouseDown: boolean = false;
   private parent: HTMLElement;
+  private grabbedTileState: TileState | null = null;
   private tileSize: number;
-  private isCtrlKeyDown: boolean = false;
-  private parentElementBoundingRect: ClientRect;
 
   tiles: Tile[][];
+  startTile: Tile | null = null;
+  goalTile: Tile | null = null;
   horizontalCount: number;
   verticalCount: number;
 
@@ -20,9 +21,6 @@ class Grid {
     this.horizontalCount = horizontalCount;
     this.verticalCount = verticalCount;
 
-    // TODO: Implemented positioning of start and goal tiles
-
-    this.parentElementBoundingRect = parent.getBoundingClientRect();
     this.tiles = Array
       .from({ length: this.horizontalCount },
         () => (
@@ -32,11 +30,7 @@ class Grid {
     this.createGrid();
     this.initStartAndGoalTiles();
 
-    document.addEventListener("keydown", e => this.onKeyDown(e));
-    document.addEventListener("keyup", e => this.onKeyUp(e));
-    this.parent.addEventListener("mousedown", e => this.onMouseDown(e));
     this.parent.addEventListener("mouseup", e => this.onMouseUp(e));
-    this.parent.addEventListener("mousemove", e => this.onMouseMove(e));
   }
 
   private createGrid() {
@@ -51,12 +45,11 @@ class Grid {
         tileEl.style.height = `${this.tileSize.toString()}px`;
         tileEl.className = "tile tile--unvisited";
 
-        const tileX = i * this.tileSize;
-        const tileY = j * this.tileSize;
-        const tile: Tile = { x: tileX, y: tileY, state: TileState.Unvisited, htmlEl: tileEl };
+        const tile: Tile = { x: i, y: j, state: TileState.Unvisited, htmlEl: tileEl };
         this.tiles[i][j] = tile;
 
-        tileEl.addEventListener("click", () => this.onTileClick(tile));
+        tileEl.addEventListener("mousedown", e => this.onTileMouseDown(e, tile));
+        tileEl.addEventListener("mouseover", () => this.onTileMouseOver(tile));
         rowEl.appendChild(tileEl);
       }
 
@@ -65,67 +58,59 @@ class Grid {
   }
 
   private initStartAndGoalTiles() {
-    const startTile = this.tiles[5][10];
-    const goalTile = this.tiles[40][30];
+    // TODO: Set specific coordinates of start and goal tiles depending on grid size
+    this.startTile = this.tiles[5][5];
+    this.goalTile = this.tiles[10][10];
 
-    this.setTileState(startTile, TileState.Start);
-    this.setTileState(goalTile, TileState.Goal);
+    this.setTileState(this.startTile, TileState.Start);
+    this.setTileState(this.goalTile, TileState.Goal);
   }
 
-  private onMouseDown(e: MouseEvent) {
+  private onTileMouseDown(e: MouseEvent, tile: Tile) {
     e.preventDefault();
 
-    this.isMouseDown = true;
-  }
+    if (Visualizer.isRunning) { return; }
 
-  private onMouseUp(e: MouseEvent) {
-    this.isMouseDown = false;
-  }
+    this.grabbedTileState = tile.state;
 
-  private onKeyDown(e: KeyboardEvent) {
-    if (e.keyCode === 17) {
-      this.isCtrlKeyDown = true;
-    }
-  }
-
-  private onKeyUp(e: KeyboardEvent) {
-    if (e.keyCode === 17) {
-      this.isCtrlKeyDown = false;
-    }
-  }
-
-  private onMouseMove(e: MouseEvent) {
-    if (!this.isMouseDown || Visualizer.isRunning) { return; }
-
-    const mouseX = e.x - this.parentElementBoundingRect.left;
-    const mouseY = e.y - this.parentElementBoundingRect.top;
-
-    // TODO: Optimize
-    let foundTile = null;
-    for (let i = 0; i < this.horizontalCount; i++) {
-      for (let j = 0; j < this.verticalCount; j++) {
-        const t = this.tiles[i][j];
-
-        if (mouseX > t.x && mouseX < (t.x + this.tileSize)
-          && mouseY > t.y && mouseY < (t.y + this.tileSize)) {
-          foundTile = t;
-        }
-      }
-    }
-
-    if (foundTile && foundTile.state !== TileState.Start && foundTile.state !== TileState.Goal) {
-      const newState = this.isCtrlKeyDown ? TileState.Unvisited : TileState.Wall;
-      this.setTileState(foundTile, newState);
-    }
-  }
-
-  private onTileClick(tile: Tile) {
-    if (Visualizer.isRunning || tile.state === TileState.Start || tile.state === TileState.Goal) {
+    if (tile.state === TileState.Start || tile.state === TileState.Goal ||
+        this.grabbedTileState === TileState.Start ||
+        this.grabbedTileState === TileState.Goal) {
       return;
     }
 
-    const newState = this.isCtrlKeyDown ? TileState.Unvisited : TileState.Wall;
+    const newState = this.grabbedTileState === TileState.Wall ? TileState.Unvisited : TileState.Wall;
     this.setTileState(tile, newState);
+  }
+
+  private onTileMouseOver(tile: Tile) {
+    if (this.grabbedTileState === null || !this.startTile || !this.goalTile ||
+        tile.state === TileState.Start || tile.state === TileState.Goal) {
+      return;
+    }
+
+    if (this.grabbedTileState === TileState.Start) {
+      this.setTileState(this.startTile, TileState.Unvisited);
+      this.setTileState(tile, TileState.Start);
+
+      this.startTile = tile;
+      return;
+    }
+
+    if (this.grabbedTileState === TileState.Goal) {
+      this.setTileState(this.goalTile, TileState.Unvisited);
+      this.setTileState(tile, TileState.Goal);
+
+      this.goalTile = tile;
+      return;
+    }
+
+    const newState = this.grabbedTileState === TileState.Wall ? TileState.Unvisited : TileState.Wall;
+    this.setTileState(tile, newState);
+  }
+
+  private onMouseUp(e: MouseEvent) {
+    this.grabbedTileState = null;
   }
 
   setTileState(tile: Tile, newState: TileState) {
@@ -161,11 +146,28 @@ class Grid {
       for (let j = 0; j < this.verticalCount; j++) {
         const tile = this.tiles[i][j];
 
-        if (tile.state == TileState.Wall) {
+        if (tile.state === TileState.Wall) {
           this.setTileState(tile, TileState.Unvisited);
         }
       }
     }
+  }
+
+  mapTilesToGraphNodes(): Node[][] {
+    let nodes: Node[][] = [];
+
+    for (let i = 0; i < this.horizontalCount; i++) {
+      nodes[i] = [];
+  
+      for (let j = 0; j < this.verticalCount; j++) {
+        const tile = this.tiles[i][j];
+        const isWall = this.tiles[i][j].state === TileState.Wall;
+
+        nodes[i][j] = { x: tile.x, y: tile.y, isWall };
+      }
+    }
+
+    return nodes;
   }
 }
 

@@ -12,6 +12,12 @@ import { Tile, TileState } from "./models/tile";
 
 import Visualizer from "./visualizer";
 
+/*
+  TODO:
+  - add button for toggling grid type from square to hexagon
+  
+*/
+
 let grid: Grid;
 let visualizeToggleButton: HTMLButtonElement;
 let clearWallsButton: HTMLButtonElement;
@@ -69,21 +75,9 @@ function onVisualizeButtonClick() {
     return;
   }
 
-  // TODO: Testing purpose (EXTRACT SOMEWHERE)
-  const start = { x: 5, y: 10, isWall: false };
-  const goal = { x: 40, y: 30, isWall: false };
-  const tiles = grid.tiles;
-  const nodes: any[][] = [];
-
-  for (let i = 0; i < grid.horizontalCount; i++) {
-    nodes[i] = [];
-
-    for (let j = 0; j < grid.verticalCount; j++) {
-      const isWall = tiles[i][j].state === TileState.Wall;
-      nodes[i][j] = { x: i, y: j, isWall };
-    }
-  }
-
+  const start = { x: grid.startTile!.x, y: grid.startTile!.y, isWall: false };
+  const goal = { x: grid.goalTile!.x, y: grid.goalTile!.y, isWall: false };
+  const nodes = grid.mapTilesToGraphNodes();
   const graph = new WeightedGraph(nodes, grid.horizontalCount, grid.verticalCount);
   const searchResult = aStarSearch(graph, start, goal);
 
