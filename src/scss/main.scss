@@ -7,9 +7,24 @@
 @import "layout/navbar";
 @import "layout/footer";
 
-@import "components/grid";
+@import "components/square-grid";
+@import "components/hexagon-grid";
 
-#app-container {}
+#app-container {
+  height: 100vh;
+}
+
+#square-grid-container, #hexagon-grid-container {
+  display: none;
+
+  &.visible {
+    display: block;
+  }
+}
+
+#hexagon-grid-container {
+  height: 100%;
+}
 
 #visualize-toggle-btn {
   height: 4rem;
@@ -30,4 +45,11 @@
   width: 12rem;
   color: whitesmoke;
   background-color: lightseagreen;
+}
+
+#grid-type-toggle-btn {
+  height: 4rem;
+  width: 16rem;
+  color: whitesmoke;
+  background-color: grey;
 }

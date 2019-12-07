@@ -1,3 +1,7 @@
+import SquareGrid from "./square-grid";
+import HexagonGrid from "./hexagon-grid";
+import { GridType, IGrid } from "./grid";
+
 interface Node {
   x: number;
   y: number;
@@ -9,14 +13,16 @@ class Graph {
   nodes: Node[][];
   width: number;
   height: number;
+  gridType: GridType;
 
-  constructor(nodes: Node[][], width: number, height: number) {
-    this.nodes = nodes;
-    this.width = width;
-    this.height = height;
+  constructor(grid: IGrid) {
+    this.nodes = grid.mapTilesToGraphNodes();
+    this.width = grid.horizontalCount;
+    this.height = grid.verticalCount;
+    this.gridType = grid instanceof SquareGrid ? GridType.Square : GridType.Hexagon;
   }
 
-  neighbors(node: Node): Node[] {
+  private squareGridNeighbors(node: Node): Node[] {
     let result: Node[] = [];
 
     if (this.isInBounds(node.x + 1, node.y)) {
@@ -34,6 +40,32 @@ class Graph {
 
     result = result.filter(n => !n.isWall);
     return result;
+  }
+
+  private hexagonGridNeighbors(node: Node): Node[] {
+    const axialDirections = [[+1, 0], [+1, -1], [0, -1], [-1, 0], [-1, +1], [0, +1]];
+    let result: Node[] = [];
+
+    axialDirections.forEach(direction => {
+      const q = node.x + direction[0];
+      const r = node.y + direction[1];
+
+      if (this.isInBounds(q, r)) {
+        result.push(this.nodes[q][r]);
+      }
+    });
+
+    result = result.filter(n => !n.isWall);
+    return result;
+  }
+
+  neighbors(node: Node): Node[] {
+    switch (this.gridType) {
+      case GridType.Square:
+        return this.squareGridNeighbors(node);
+      case GridType.Hexagon:
+        return this.hexagonGridNeighbors(node);
+    }
   }
 
   isInBounds(x: number, y: number): boolean {

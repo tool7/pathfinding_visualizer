@@ -12,7 +12,7 @@
   }
 
   &--wall {
-    background-color: navy;
+    background-color: #333333;
     animation-name: wallTileAnimation;
     animation-duration: .2s;
     animation-timing-function: ease-out;
@@ -27,7 +27,7 @@
   }
 
   &--path {
-    background-color: cyan;
+    background-color: cornflowerblue;
     animation-name: pathTileAnimation;
     animation-duration: .2s;
     animation-timing-function: ease-out;

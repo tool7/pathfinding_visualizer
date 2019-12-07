@@ -3,12 +3,7 @@ import HashMap from "../models/hash-map";
 import PathfindingResult from "../models/pathfinding-result";
 import { WeightedGraph, Node } from "../models/graph";
 
-// Heuristic function that tells us how close we are to the goal
-function heuristic(nodeA: Node, nodeB: Node): number {
-  return Math.abs(nodeA.x - nodeB.x) + Math.abs(nodeA.y - nodeB.y);
-}
-
-function greedyBestFirstSearch(graph: WeightedGraph, start: Node, goal: Node): PathfindingResult {
+function greedyBestFirstSearch(graph: WeightedGraph, start: Node, goal: Node, heuristicFunction: (nodeA: Node, nodeB: Node) => number): PathfindingResult {
   let frontier = new PriorityQueue<Node>();
   let cameFrom = new HashMap();
   let visited: Node[] = [];
@@ -31,7 +26,7 @@ function greedyBestFirstSearch(graph: WeightedGraph, start: Node, goal: Node): P
 
       cameFrom.set(next, current);
 
-      const priority = heuristic(next, goal);
+      const priority = heuristicFunction(next, goal);
       frontier.enqueue(next, priority);
     });
   }

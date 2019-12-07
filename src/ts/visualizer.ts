@@ -1,5 +1,5 @@
-import Grid from "./models/grid";
-import { TileState } from "./models/tile";
+import { IGrid } from "./models/grid";
+import { TileState } from "./models/grid";
 import PathfindingResult from "./models/pathfinding-result";
 import { Node } from "./models/graph";
 import Queue from "./models/queue";
@@ -13,7 +13,7 @@ class Visualizer {
   private static _isRunning: boolean = false;
   private static _intervalId: number;
 
-  private static simulateTiles(nodeQueue: Queue<Node>, grid: Grid, newTileState: TileState, simulationStepDelay: number, completeCallback?: () => void) {
+  private static simulateTiles(nodeQueue: Queue<Node>, grid: IGrid, newTileState: TileState, simulationStepDelay: number, completeCallback?: () => void) {
     Visualizer._intervalId = setInterval(() => {
       const nextNode = nodeQueue.dequeue();
 
@@ -33,7 +33,7 @@ class Visualizer {
     }, simulationStepDelay);
   }
 
-  static simulate(grid: Grid, pathfindingResult: PathfindingResult, simulationStepDelay: number = 100) {
+  static simulate(grid: IGrid, pathfindingResult: PathfindingResult, simulationStepDelay: number = 100) {
     if (Visualizer._isRunning) { return; }
 
     Visualizer._isRunning = true;
@@ -48,7 +48,7 @@ class Visualizer {
     });
   }
 
-  static clear(grid: Grid) {
+  static clear(grid: IGrid) {
     clearInterval(Visualizer._intervalId);
     Visualizer._isRunning = false;
 

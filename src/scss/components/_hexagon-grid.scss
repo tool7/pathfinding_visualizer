@@ -1,0 +1,68 @@
+$hexagon-tile-width: 50px;
+$hexagon-inner-scale: 0.95;
+
+@function calcHexTrianglesHeight($hex-width) {
+  @return $hex-width / 1.73 / 2;
+}
+
+#hexagon-grid {
+  width: 100%;
+  height: 100%;
+}
+
+.hexagon-tile {
+  &--start {
+    fill: green;
+  }
+
+  &--goal {
+    fill: orangered;
+  }
+
+  &--unvisited {
+    fill: transparent;
+    stroke: lightslategray;
+    stroke-width: 1px;
+  }
+
+  &--wall {
+    fill: #333333;
+    animation-name: wallTileAnimation;
+    animation-duration: .2s;
+    animation-timing-function: ease-out;
+  }
+
+  &--visited {
+    fill: yellowgreen;
+    stroke: whitesmoke;
+    stroke-width: 1px;
+    animation-name: visitedTileAnimation;
+    animation-duration: .5s;
+    animation-timing-function: ease-out;
+  }
+
+  &--path {
+    fill: cornflowerblue;
+    animation-name: pathTileAnimation;
+    animation-duration: .2s;
+    animation-timing-function: ease-out;
+  }
+}
+
+@keyframes wallTileAnimation {
+  0% { transform: scale(0); }
+  75% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+@keyframes visitedTileAnimation {
+  0% { transform: scale(0); }
+  75% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+@keyframes pathTileAnimation {
+  0% { transform: scale(0); }
+  75% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
