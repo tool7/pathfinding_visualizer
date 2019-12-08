@@ -1,7 +1,4 @@
-import PriorityQueue from "../models/priority-queue";
-import HashMap from "../models/hash-map";
-import PathfindingResult from "../models/pathfinding-result";
-import { WeightedGraph, Node } from "../models/graph";
+import { PriorityQueue, HashMap, PathfindingResult, WeightedGraph, Node } from "../models";
 
 function aStarSearch(graph: WeightedGraph, start: Node, goal: Node, heuristicFunction: (nodeA: Node, nodeB: Node) => number): PathfindingResult {
   let frontier = new PriorityQueue<Node>();

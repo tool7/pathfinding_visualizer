@@ -1,4 +1,4 @@
-class HashMap {
+export default class HashMap {
 
   items: any;
 
@@ -33,5 +33,3 @@ class HashMap {
     return !!item;
   }
 }
-
-export default HashMap;

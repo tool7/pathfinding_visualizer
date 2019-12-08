@@ -1,6 +1,4 @@
 import { convertAxialToArrayIndicies } from "../helpers/grid-helper";
-import SquareGrid from "./square-grid";
-import HexagonGrid from "./hexagon-grid";
 import { GridType, IGrid } from "./grid";
 
 interface Node {
@@ -20,7 +18,7 @@ class Graph {
     this.nodes = grid.mapTilesToGraphNodes();
     this.width = grid.horizontalCount;
     this.height = grid.verticalCount;
-    this.gridType = grid instanceof SquareGrid ? GridType.Square : GridType.Hexagon;
+    this.gridType = grid.type;
   }
 
   private squareGridNeighbors(node: Node): Node[] {

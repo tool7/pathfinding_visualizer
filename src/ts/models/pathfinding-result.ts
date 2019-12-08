@@ -1,8 +1,6 @@
 import { Node } from "./graph";
 
-interface PathfindingResult {
+export default interface PathfindingResult {
   path: Node[];
   visited: Node[];
 }
-
-export default PathfindingResult;

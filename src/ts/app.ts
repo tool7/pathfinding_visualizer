@@ -2,23 +2,10 @@ import { GridTileCount } from "./config/grid-config";
 import { squareGridHeuristic, hexagonGridHeuristic } from "./config/algorithm-config";
 import { getNumberFactors } from "./helpers/number-helper";
 
-import breadthFirstSearch from "./algorithms/breadth-first-search";
-import dijkstraAlgorithm from "./algorithms/dijkstra-algorithm";
-import greedyBestFirstSearch from "./algorithms/greedy-best-first-search";
-import aStarSearch from "./algorithms/a-star-search";
-
-import SquareGrid from "./models/square-grid";
-import HexagonGrid from "./models/hexagon-grid";
-import { Graph, WeightedGraph } from "./models/graph";
-import { GridType, IGrid } from "./models/grid";
+import { breadthFirstSearch, dijkstraAlgorithm, greedyBestFirstSearch, aStarSearch } from "./algorithms";
+import { WeightedGraph, IGrid, SquareGrid, HexagonGrid, GridType } from "./models";
 
 import Visualizer from "./visualizer";
-
-/*
-  TODO:
-  - 
-  
-*/
 
 let activeGridType: GridType = GridType.Square;
 let squareGridContainer: HTMLElement;
@@ -150,6 +137,3 @@ function onGridTypeToggleButtonClick() {
 
   gridTypeToggleButton.innerHTML = newBtnText;
 }
-
-// Debugging purpose
-onGridTypeToggleButtonClick();

@@ -1,4 +1,4 @@
-class Queue<T> {
+export default class Queue<T> {
 
   elements: T[];
 
@@ -25,5 +25,3 @@ class Queue<T> {
     return item;
   }
 }
-
-export default Queue;

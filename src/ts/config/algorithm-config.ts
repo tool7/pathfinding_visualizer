@@ -1,4 +1,4 @@
-import { Node } from "../models/graph";
+import { Node } from "../models";
 
 // Heuristic functions that calculate distance between two tiles on the grid.
 // They tell us how close the visited tile is to the goal.

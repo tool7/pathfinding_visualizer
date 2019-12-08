@@ -3,7 +3,7 @@ interface Element<T> {
   priority: number;
 }
 
-class PriorityQueue<T> {
+export default class PriorityQueue<T> {
 
   elements: Element<T>[];
 
@@ -40,5 +40,3 @@ class PriorityQueue<T> {
     return bestItem;
   }
 }
-
-export default PriorityQueue;

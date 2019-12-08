@@ -1,11 +1,6 @@
 import { convertAxialToArrayIndicies } from "./helpers/grid-helper";
-import { IGrid, Tile } from "./models/grid";
-import { TileState } from "./models/grid";
-import PathfindingResult from "./models/pathfinding-result";
-import { Node } from "./models/graph";
-import Queue from "./models/queue";
-import SquareGrid from "./models/square-grid";
-import HexagonGrid from "./models/hexagon-grid";
+
+import { IGrid, SquareGrid, HexagonGrid, TileState, Queue, PathfindingResult, Node } from "./models";
 
 class Visualizer {
 
