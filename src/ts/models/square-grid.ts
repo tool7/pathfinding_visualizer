@@ -39,15 +39,16 @@ class SquareGrid implements IGrid {
       
       for (let i = 0; i < this.horizontalCount; i++) {
         const tileEl: HTMLElement = document.createElement("td");
+        const tile: Tile = { x: i, y: j, state: TileState.Unvisited, htmlEl: tileEl };
+        
         tileEl.style.width = `${this.tileSize.toString()}px`;
         tileEl.style.height = `${this.tileSize.toString()}px`;
         tileEl.classList.add("tile--unvisited");
 
-        const tile: Tile = { x: i, y: j, state: TileState.Unvisited, htmlEl: tileEl };
         this.tiles[i][j] = tile;
-
         tileEl.addEventListener("mousedown", e => this.onTileMouseDown(e, tile));
         tileEl.addEventListener("mouseover", () => this.onTileMouseOver(tile));
+
         rowEl.appendChild(tileEl);
       }
 

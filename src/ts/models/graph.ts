@@ -1,3 +1,4 @@
+import { convertAxialToArrayIndicies } from "../helpers/grid-helper";
 import SquareGrid from "./square-grid";
 import HexagonGrid from "./hexagon-grid";
 import { GridType, IGrid } from "./grid";
@@ -49,9 +50,11 @@ class Graph {
     axialDirections.forEach(direction => {
       const q = node.x + direction[0];
       const r = node.y + direction[1];
+      
+      let { i, j } = convertAxialToArrayIndicies(q, r);
 
-      if (this.isInBounds(q, r)) {
-        result.push(this.nodes[q][r]);
+      if (this.isInBounds(i, j)) {
+        result.push(this.nodes[i][j]);
       }
     });
 
@@ -69,7 +72,13 @@ class Graph {
   }
 
   isInBounds(x: number, y: number): boolean {
-    return x >= 0 && x < this.width && y >= 0 && y < this.height;
+    switch (this.gridType) {
+      case GridType.Square:
+        return x >= 0 && x < this.width && y >= 0 && y < this.height;
+      case GridType.Hexagon:
+        return x >= 0 && x < this.width && y >= 0 && y < this.height;
+    }
+    
   }
 
   areEqual(nodeA: Node, nodeB: Node): boolean {

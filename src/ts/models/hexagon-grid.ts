@@ -1,3 +1,4 @@
+import { convertArrayToAxialCoordinates } from "../helpers/grid-helper";
 import { IGrid, Tile, TileState } from "./grid";
 import { Node } from "./graph";
 import Visualizer from "../visualizer";
@@ -49,32 +50,34 @@ class HexagonGrid implements IGrid {
 
     const radius = this.tileSize;
 
-    for (let q = 0; q < this.horizontalCount; q++) {
-      for (let r = 0; r < this.verticalCount; r++) {
+    // Using "array of arrays" storage for axial coordinates
+    // Source: https://www.redblobgames.com/grids/hexagons/#map-storage
+    for (let j = 0; j < this.verticalCount; j++) {
+      for (let i = 0; i < this.horizontalCount; i++) {
         const offset = (Math.sqrt(3) * radius) / 2;
 
-        let x = this.tileSize + offset * q * 2;
-        let y = this.tileSize + offset * r * Math.sqrt(3);
-        if (r % 2 !== 0) {
-          x += offset;
+        let screenX = this.tileSize + offset * i * 2;
+        let screenY = this.tileSize + offset * j * Math.sqrt(3);
+        if (j % 2 !== 0) {
+          screenX += offset;
         }
 
-        const tileEl: SVGElement = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
-        tileEl.classList.add("hexagon-tile--unvisited");
-        tileEl.setAttribute("points", hexPoints(x, y, radius));
+        let { q, r } = convertArrayToAxialCoordinates(i, j);
 
+        const tileEl: SVGElement = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
         const tile: Tile = { x: q, y: r, state: TileState.Unvisited, htmlEl: tileEl };
-        this.tiles[q][r] = tile;
+
+        tileEl.setAttribute("points", hexPoints(screenX, screenY, radius));
+        tileEl.style.transformOrigin = `${screenX}px ${screenY}px`;
+        tileEl.classList.add("hexagon-tile--unvisited");
         
+        this.tiles[i][j] = tile;
         tileEl.addEventListener("mousedown", e => this.onTileMouseDown(e, tile));
         tileEl.addEventListener("mouseover", () => this.onTileMouseOver(tile));
 
         this.parent.appendChild(tileEl);
       }
     }
-    
-
-
   }
 
   private initStartAndGoalTiles() {

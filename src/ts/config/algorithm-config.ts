@@ -8,5 +8,5 @@ export function squareGridHeuristic(a: Node, b: Node): number {
 }
 
 export function hexagonGridHeuristic(a: Node, b: Node): number {
-  return (Math.abs(a.x - b.x) + Math.abs(a.x + a.y - b.x - b.y) + Math.abs(a.y - b.y)) / 2
+  return (Math.abs(a.x - b.x) + Math.abs(a.x + a.y - b.x - b.y) + Math.abs(a.y - b.y)) / 2;
 }

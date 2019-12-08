@@ -1,6 +1,6 @@
 import { GridTileCount } from "./config/grid-config";
 import { squareGridHeuristic, hexagonGridHeuristic } from "./config/algorithm-config";
-import { getNumberFactors } from "./helpers/number";
+import { getNumberFactors } from "./helpers/number-helper";
 
 import breadthFirstSearch from "./algorithms/breadth-first-search";
 import dijkstraAlgorithm from "./algorithms/dijkstra-algorithm";
@@ -10,13 +10,13 @@ import aStarSearch from "./algorithms/a-star-search";
 import SquareGrid from "./models/square-grid";
 import HexagonGrid from "./models/hexagon-grid";
 import { Graph, WeightedGraph } from "./models/graph";
-import { GridType, IGrid, Tile, TileState } from "./models/grid";
+import { GridType, IGrid } from "./models/grid";
 
 import Visualizer from "./visualizer";
 
 /*
   TODO:
-  - add button for toggling grid type from square to hexagon
+  - 
   
 */
 

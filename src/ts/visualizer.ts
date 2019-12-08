@@ -1,8 +1,11 @@
-import { IGrid } from "./models/grid";
+import { convertAxialToArrayIndicies } from "./helpers/grid-helper";
+import { IGrid, Tile } from "./models/grid";
 import { TileState } from "./models/grid";
 import PathfindingResult from "./models/pathfinding-result";
 import { Node } from "./models/graph";
 import Queue from "./models/queue";
+import SquareGrid from "./models/square-grid";
+import HexagonGrid from "./models/hexagon-grid";
 
 class Visualizer {
 
@@ -23,7 +26,15 @@ class Visualizer {
         return;
       }
 
-      const tile = grid.tiles[nextNode.x][nextNode.y];
+      let tile: any;
+
+      if (grid instanceof SquareGrid) {
+        tile = grid.tiles[nextNode.x][nextNode.y];
+      } else if (grid instanceof HexagonGrid) {
+        let { i, j } = convertAxialToArrayIndicies(nextNode.x, nextNode.y);
+        tile = grid.tiles[i][j];
+      }
+
       if (tile.state === TileState.Start || tile.state === TileState.Goal) {
         return;
       }
