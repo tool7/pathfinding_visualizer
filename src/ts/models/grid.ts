@@ -61,9 +61,11 @@ abstract class BaseGrid implements IGrid {
   }
 
   protected initStartAndGoalTiles() {
-    // TODO: Set specific coordinates of start and goal tiles depending on grid size
-    this.startTile = this.tiles[5][5];
-    this.goalTile = this.tiles[10][10];
+    const xOffset = Math.floor(this.horizontalCount * 0.2);
+    const yOffset = Math.round(this.verticalCount / 2);
+    
+    this.startTile = this.tiles[xOffset][yOffset];
+    this.goalTile = this.tiles[this.horizontalCount - xOffset][yOffset];
 
     this.setTileState(this.startTile, TileState.Start);
     this.setTileState(this.goalTile, TileState.Goal);
