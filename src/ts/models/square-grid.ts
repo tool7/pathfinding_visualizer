@@ -1,10 +1,11 @@
+import { SQUARE_TILE_SIZE } from "./../config/grid-config";
 import { BaseGrid, GridType, Tile, TileState } from "./grid";
 
 export default class SquareGrid extends BaseGrid {
   type: GridType = GridType.Square;
 
-  constructor(parent: HTMLElement, tileSize: number, horizontalCount: number, verticalCount: number) {
-    super(parent, tileSize, horizontalCount, verticalCount);
+  constructor(parent: HTMLElement, horizontalCount: number, verticalCount: number) {
+    super(parent, horizontalCount, verticalCount);
 
     this.createGrid();
     this.initStartAndGoalTiles();
@@ -18,8 +19,8 @@ export default class SquareGrid extends BaseGrid {
         const tileEl: HTMLElement = document.createElement("td");
         const tile: Tile = { x: i, y: j, state: TileState.Unvisited, htmlEl: tileEl };
         
-        tileEl.style.width = `${this.tileSize.toString()}px`;
-        tileEl.style.height = `${this.tileSize.toString()}px`;
+        tileEl.style.width = `${SQUARE_TILE_SIZE.toString()}px`;
+        tileEl.style.height = `${SQUARE_TILE_SIZE.toString()}px`;
         tileEl.classList.add("square-tile--unvisited");
 
         this.tiles[i][j] = tile;

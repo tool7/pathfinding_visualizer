@@ -1,66 +1,39 @@
-import { GridTileCount } from "./config/grid-config";
+import { SQUARE_TILE_SIZE, HEXAGON_TILE_WIDTH } from "./config/grid-config";
 import { squareGridHeuristic, hexagonGridHeuristic } from "./config/algorithm-config";
-import { getNumberFactors } from "./helpers/number-helper";
 
 import { breadthFirstSearch, dijkstraAlgorithm, greedyBestFirstSearch, aStarSearch } from "./algorithms";
 import { WeightedGraph, IGrid, SquareGrid, HexagonGrid, GridType } from "./models";
 
 import Visualizer from "./visualizer";
 
+const gridContainer: HTMLElement = document.getElementById("grid-container")!;
+const squareGridElement: HTMLElement = document.getElementById("square-grid")!;
+const hexagonGridElement = document.getElementById("hexagon-grid")!;
+
 let activeGridType: GridType = GridType.Square;
-let squareGridContainer: HTMLElement;
-let hexagonGridContainer: HTMLElement;
 let squareGrid: IGrid;
 let hexagonGrid: IGrid;
 let visualizeToggleButton: HTMLButtonElement;
 let clearWallsButton: HTMLButtonElement;
 let gridTypeToggleButton: HTMLButtonElement;
 
-initGrids();
+initSquareGrid();
+initHexagonGrid();
 initControls();
 
-function initGrids(): void {
-  const windowScreenRatio = window.innerWidth / window.innerHeight;
-  const gridTileCountFactors = getNumberFactors(GridTileCount);
-  const tileCountSqrt = Math.sqrt(GridTileCount) * windowScreenRatio;
-  let closestTileCountFactor = 0;
+function initSquareGrid(): void {
+  const xAxisTileCount = Math.floor(gridContainer.clientWidth / SQUARE_TILE_SIZE);
+  const yAxisTileCount = Math.floor(gridContainer.clientHeight / SQUARE_TILE_SIZE);
+  squareGrid = new SquareGrid(squareGridElement, xAxisTileCount, yAxisTileCount);
+}
 
-  for (let i = 0; i < gridTileCountFactors.length - 1; i++) {
-    const currentFactor = gridTileCountFactors[i];
-    const nextFactor = gridTileCountFactors[i + 1];
-
-    if (tileCountSqrt >= currentFactor && tileCountSqrt <= nextFactor) {
-      const currentFactorDistance = Math.abs(tileCountSqrt - currentFactor);
-      const nextFactorDistance = Math.abs(tileCountSqrt - nextFactor);
-
-      const factorDistances = {
-        [currentFactorDistance]: currentFactor,
-        [nextFactorDistance]: nextFactor
-      };
-
-      const minDistance = Math.min(currentFactorDistance, nextFactorDistance);
-      closestTileCountFactor = factorDistances[minDistance];
-      break;
-    }
-  }
-  
-  const xAxisTileCount = closestTileCountFactor;
-  const yAxisTileCount = GridTileCount / closestTileCountFactor;
-  const tileSize = Math.floor(window.innerWidth / xAxisTileCount);
-
-  const squareGridElement = document.getElementById("square-grid")!;
-  squareGrid = new SquareGrid(squareGridElement, tileSize, xAxisTileCount, yAxisTileCount);
-
-
-  // TODO: Set reasonable xAxisTileCount and yAxisTileCount
-  const hexagonGridElement = document.getElementById("hexagon-grid")!;
-  hexagonGrid = new HexagonGrid(hexagonGridElement, tileSize, 30, 30);
+function initHexagonGrid(): void {
+  const xAxisTileCount = Math.floor(gridContainer.clientWidth / HEXAGON_TILE_WIDTH);
+  const yAxisTileCount = Math.floor(gridContainer.clientHeight / HEXAGON_TILE_WIDTH);
+  hexagonGrid = new HexagonGrid(hexagonGridElement, xAxisTileCount, yAxisTileCount);
 }
 
 function initControls(): void {
-  squareGridContainer = document.getElementById("square-grid-container") as HTMLElement;
-  hexagonGridContainer = document.getElementById("hexagon-grid-container") as HTMLElement;
-
   visualizeToggleButton = document.getElementById("visualize-toggle-btn") as HTMLButtonElement;
   visualizeToggleButton.addEventListener("click", onVisualizeButtonClick);
 
@@ -119,16 +92,16 @@ function onGridTypeToggleButtonClick() {
 
   switch (activeGridType) {
     case GridType.Square:
-      squareGridContainer.classList.remove("visible");
-      hexagonGridContainer.classList.add("visible");
+      squareGridElement.classList.remove("active");
+      hexagonGridElement.classList.add("active");
       newBtnText = "Switch to square grid";
 
       activeGridType = GridType.Hexagon;
       break;
   
     case GridType.Hexagon:
-      hexagonGridContainer.classList.remove("visible");
-      squareGridContainer.classList.add("visible");
+      hexagonGridElement.classList.remove("active");
+      squareGridElement.classList.add("active");
       newBtnText = "Switch to hexagon grid";
 
       activeGridType = GridType.Square;

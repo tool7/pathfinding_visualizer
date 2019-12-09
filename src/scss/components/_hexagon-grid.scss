@@ -6,8 +6,13 @@ $hexagon-inner-scale: 0.95;
 }
 
 #hexagon-grid {
+  display: none;
   width: 100%;
   height: 100%;
+
+  &.active {
+    display: block;
+  }
 }
 
 .hexagon-tile {

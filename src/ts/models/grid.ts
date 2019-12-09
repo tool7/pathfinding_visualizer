@@ -40,16 +40,14 @@ abstract class BaseGrid implements IGrid {
   private grabbedTileState: TileState | null = null;
   
   parent: HTMLElement;
-  tileSize: number;
   tiles: Tile[][];
   startTile: Tile | null = null;
   goalTile: Tile | null = null;
   horizontalCount: number;
   verticalCount: number;
   
-  constructor(parent: HTMLElement, tileSize: number, horizontalCount: number, verticalCount: number) {
+  constructor(parent: HTMLElement, horizontalCount: number, verticalCount: number) {
     this.parent = parent;
-    this.tileSize = tileSize;
     this.horizontalCount = horizontalCount;
     this.verticalCount = verticalCount;
 

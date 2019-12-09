@@ -1,18 +1,22 @@
+import { HEXAGON_TILE_WIDTH } from "./../config/grid-config";
 import { convertArrayToAxialCoordinates } from "../helpers/grid-helper";
 import { BaseGrid, GridType, Tile, TileState } from "./grid";
 
 export default class HexagonGrid extends BaseGrid {
   type: GridType = GridType.Hexagon;
 
-  constructor(parent: HTMLElement, tileSize: number, horizontalCount: number, verticalCount: number) {
-    super(parent, tileSize, horizontalCount, verticalCount);
+  constructor(parent: HTMLElement, horizontalCount: number, verticalCount: number) {
+    super(parent, horizontalCount, verticalCount);
 
     this.createGrid();
     this.initStartAndGoalTiles();
   }
 
   private createGrid() {
-    const hexPoints = (x: number, y: number, radius: number) => {
+    // 0.75 in order to correctly fill grid width with hexagon tiles
+    const radius = HEXAGON_TILE_WIDTH * 0.57;
+
+    const hexPoints = (x: number, y: number) => {
       let points = [];
       for (let theta = 0; theta < Math.PI * 2; theta += Math.PI / 3) {
         let pointX, pointY;
@@ -23,16 +27,14 @@ export default class HexagonGrid extends BaseGrid {
       return points.join(" ");
     };
 
-    const radius = this.tileSize;
-
     // Using "array of arrays" storage for axial coordinates
     // Source: https://www.redblobgames.com/grids/hexagons/#map-storage
     for (let j = 0; j < this.verticalCount; j++) {
       for (let i = 0; i < this.horizontalCount; i++) {
         const offset = (Math.sqrt(3) * radius) / 2;
 
-        let screenX = this.tileSize + offset * i * 2;
-        let screenY = this.tileSize + offset * j * Math.sqrt(3);
+        let screenX = radius + offset * i * 2;
+        let screenY = radius + offset * j * Math.sqrt(3);
         if (j % 2 !== 0) {
           screenX += offset;
         }
@@ -42,7 +44,7 @@ export default class HexagonGrid extends BaseGrid {
         const tileEl: SVGElement = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
         const tile: Tile = { x: q, y: r, state: TileState.Unvisited, htmlEl: tileEl };
 
-        tileEl.setAttribute("points", hexPoints(screenX, screenY, radius));
+        tileEl.setAttribute("points", hexPoints(screenX, screenY));
         tileEl.style.transformOrigin = `${screenX}px ${screenY}px`;
         tileEl.classList.add("hexagon-tile--unvisited");
 

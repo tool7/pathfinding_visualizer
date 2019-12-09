@@ -14,15 +14,7 @@
   height: 100vh;
 }
 
-#square-grid-container, #hexagon-grid-container {
-  display: none;
-
-  &.visible {
-    display: block;
-  }
-}
-
-#hexagon-grid-container {
+#grid-container {
   height: 100%;
 }
 
