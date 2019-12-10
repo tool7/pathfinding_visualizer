@@ -1,11 +1,10 @@
-import Dropdown from "./components/dropdown";
-customElements.define("drop-down", Dropdown);
+import "./components/dropdown";
 
 import { SQUARE_TILE_SIZE, HEXAGON_TILE_WIDTH } from "./config/grid-config";
 import { squareGridHeuristic, hexagonGridHeuristic } from "./config/algorithm-config";
 
 import { breadthFirstSearch, dijkstraAlgorithm, greedyBestFirstSearch, aStarSearch } from "./algorithms";
-import { WeightedGraph, IGrid, SquareGrid, HexagonGrid, GridType } from "./models";
+import { WeightedGraph, IGrid, SquareGrid, HexagonGrid, GridType, Node, PathfindingResult } from "./models";
 
 import Visualizer from "./visualizer";
 
@@ -14,7 +13,11 @@ const squareGridElement: HTMLElement = document.getElementById("square-grid")!;
 const hexagonGridElement = document.getElementById("hexagon-grid")!;
 const algorithmSelector = document.getElementById("algorithm-selector")!;
 
-let activeGridType: GridType = GridType.Square;
+const appState = {
+  activeGridType: GridType.Square,
+  selectedAlgorithm: "dijkstra"
+};
+
 let squareGrid: IGrid;
 let hexagonGrid: IGrid;
 let visualizeToggleButton: HTMLButtonElement;
@@ -50,6 +53,19 @@ function initControls(): void {
   algorithmSelector.addEventListener("select", onAlgorithmSelected);
 }
 
+function findPathBySelectedAlgorithm(graph: WeightedGraph, start: Node, goal: Node, heuristicFunction: (a: Node, b: Node) => number): PathfindingResult | void {
+  switch (appState.selectedAlgorithm) {
+    case "bfs":
+      return breadthFirstSearch(graph, start, goal);
+    case "gbfs":
+      return greedyBestFirstSearch(graph, start, goal, heuristicFunction);
+    case "dijkstra":
+      return dijkstraAlgorithm(graph, start, goal);
+    case "astar":
+      return aStarSearch(graph, start, goal, heuristicFunction);
+  }
+}
+
 function onVisualizeButtonClick() {
   if (visualizeToggleButton!.classList.contains("cancel")) {
     Visualizer.clear(squareGrid);
@@ -62,15 +78,15 @@ function onVisualizeButtonClick() {
 
   let start, goal, graph, searchResult;
 
-  switch (activeGridType) {
+  switch (appState.activeGridType) {
     case GridType.Square:
       start = { x: squareGrid.startTile!.x, y: squareGrid.startTile!.y, isWall: false };
       goal = { x: squareGrid.goalTile!.x, y: squareGrid.goalTile!.y, isWall: false };
 
       graph = new WeightedGraph(squareGrid);
-      searchResult = aStarSearch(graph, start, goal, squareGridHeuristic);
-    
-      Visualizer.simulate(squareGrid, searchResult, 10);
+      searchResult = findPathBySelectedAlgorithm(graph, start, goal, squareGridHeuristic);
+
+      searchResult && Visualizer.simulate(squareGrid, searchResult, 10);
       break;
 
     case GridType.Hexagon:
@@ -78,9 +94,9 @@ function onVisualizeButtonClick() {
       goal = { x: hexagonGrid.goalTile!.x, y: hexagonGrid.goalTile!.y, isWall: false };
       
       graph = new WeightedGraph(hexagonGrid);
-      searchResult = aStarSearch(graph, start, goal, hexagonGridHeuristic);
-    
-      Visualizer.simulate(hexagonGrid, searchResult, 10);
+      searchResult = findPathBySelectedAlgorithm(graph, start, goal, hexagonGridHeuristic);
+
+      searchResult && Visualizer.simulate(hexagonGrid, searchResult, 10);
       break;
   }
 
@@ -96,13 +112,13 @@ function onClearWallsButtonClick() {
 function onGridTypeToggleButtonClick() {
   let newBtnText = "";
 
-  switch (activeGridType) {
+  switch (appState.activeGridType) {
     case GridType.Square:
       squareGridElement.classList.remove("active");
       hexagonGridElement.classList.add("active");
       newBtnText = "Switch to square grid";
 
-      activeGridType = GridType.Hexagon;
+      appState.activeGridType = GridType.Hexagon;
       break;
   
     case GridType.Hexagon:
@@ -110,13 +126,13 @@ function onGridTypeToggleButtonClick() {
       squareGridElement.classList.add("active");
       newBtnText = "Switch to hexagon grid";
 
-      activeGridType = GridType.Square;
+      appState.activeGridType = GridType.Square;
       break;
   }
 
   gridTypeToggleButton.innerHTML = newBtnText;
 }
 
-function onAlgorithmSelected(data: any) {
-  console.log(data.detail);
+function onAlgorithmSelected(e: any) {
+  appState.selectedAlgorithm = e.detail;
 }

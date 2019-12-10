@@ -7,7 +7,7 @@ interface Node {
   isWall: boolean;
 }
 
-class Graph {
+abstract class Graph {
 
   nodes: Node[][];
   width: number;
