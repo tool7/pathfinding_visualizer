@@ -3,6 +3,7 @@ class Dropdown extends HTMLElement {
   headElement: HTMLElement;
   bodyElement: HTMLElement;
   selectedTextElement: HTMLElement;
+  collapseIconElement: HTMLElement;
 
   constructor() {
     super();
@@ -42,6 +43,10 @@ class Dropdown extends HTMLElement {
           width: 2rem;
           position: absolute;
           right: 1rem;
+        }
+
+        .collapse-icon.rotated {
+          transform: rotate(180deg);
         }
 
         .dropdown-menu__body {
@@ -109,6 +114,7 @@ class Dropdown extends HTMLElement {
     this.headElement = menu.getElementsByClassName("dropdown-menu__head")[0] as HTMLElement;
     this.bodyElement = menu.getElementsByClassName("dropdown-menu__body")[0] as HTMLElement;
     this.selectedTextElement = menu.getElementsByClassName("selected-text")[0] as HTMLElement;
+    this.collapseIconElement = menu.getElementsByClassName("collapse-icon")[0] as HTMLElement;
   }
  
   connectedCallback() {
@@ -161,10 +167,12 @@ class Dropdown extends HTMLElement {
 
   private open(): void {
     this.bodyElement.style.display = "block";
+    this.collapseIconElement.classList.add("rotated");
   }
 
   private close(): void {
     this.bodyElement.style.display = "none";
+    this.collapseIconElement.classList.remove("rotated");
   }
 }
 
