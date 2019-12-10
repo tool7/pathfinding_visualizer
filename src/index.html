@@ -19,6 +19,13 @@
 
     <button id="grid-type-toggle-btn">Switch to hexagon grid</button>
 
+    <drop-down id="algorithm-selector">
+      <div class="menu-option">Breadth-first search</div>
+      <div class="menu-option">Greedy best-first search</div>
+      <div class="menu-option">Dijkstra's algorithm</div>
+      <div class="menu-option">A* search</div>
+    </drop-down>
+
     <div id="grid-container">
       <table id="square-grid" class="active"></table>
       <svg id="hexagon-grid" version="1.1" xmlns="http://www.w3.org/2000/svg"></svg>
@@ -28,6 +35,103 @@
   <footer class="footer">
     <span>Implemented in Typescript | &copy; 2019 by Marko Roje</span>
   </footer>
+
+  <template id="dropdown-template">
+    <style>
+      #dropdown-menu {
+        font-family: Consolas;
+        width: 24rem;
+        display: block;
+        background-color: transparent;
+        user-select: none;
+      }
+
+      .dropdown-menu__head:hover {
+        cursor: pointer;
+      }
+  
+      .dropdown-menu__head {
+        display: flex;
+        align-items: center;
+        background-color: lightskyblue;
+      }
+
+      .dropdown-menu__body {
+        background-color: lightskyblue;
+      }
+  
+      .dropdown-menu__head,
+      ::slotted(.menu-option) {
+        min-height: 3rem;
+      }
+
+      .collapse-icon {
+        height: 2rem;
+        width: 2rem;
+        position: absolute;
+        right: 1rem;
+      }
+
+      .dropdown-menu__body {
+        max-height: 20rem;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        border-top: 1px solid black;
+      }
+  
+      .current-choice {
+        color: black;
+        height: 3rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        padding: 1rem 0 0 1.5rem;
+      }
+  
+      .current-choice,
+      ::slotted(.menu-option) {
+        font-size: 1.4rem;
+      }
+  
+      ::slotted(.menu-option) {
+        color: black;
+        position: relative;
+        padding: .5rem 0 .5rem 1.5rem !important;
+        display: flex;
+        align-items: center;
+        transition: background-color .1s linear, color .1s linear;
+      }
+  
+      ::slotted(.menu-option:hover) {
+        cursor: pointer;
+        background-color: mediumaquamarine;
+      }
+  
+      .dropdown-menu__body::-webkit-scrollbar {
+        width: 0rem;
+      }
+  
+      .dropdown-menu__body::-webkit-scrollbar-thumb {
+        background-color: black;
+        border-left: 2.4rem solid rgba(0, 0, 0, 0);
+        background-clip: padding-box;
+      }
+  
+      .dropdown-menu__body::-webkit-scrollbar-track {
+        background-color: lightskyblue;
+      }
+    </style>
+  
+    <div id="dropdown-menu">
+      <div class="dropdown-menu__head">
+        <div class="current-choice">Choose algorithm</div>
+        <img class="collapse-icon" src="./assets/icon-arrow-down.svg"">
+      </div>
+      <div class="dropdown-menu__body">
+        <slot></slot>
+      </div>
+    </div>
+  </template>
 
   <script src="./bundle.js"></script>
 </body>

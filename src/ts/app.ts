@@ -1,3 +1,6 @@
+import Dropdown from "./components/dropdown";
+customElements.define("drop-down", Dropdown);
+
 import { SQUARE_TILE_SIZE, HEXAGON_TILE_WIDTH } from "./config/grid-config";
 import { squareGridHeuristic, hexagonGridHeuristic } from "./config/algorithm-config";
 
@@ -9,6 +12,7 @@ import Visualizer from "./visualizer";
 const gridContainer: HTMLElement = document.getElementById("grid-container")!;
 const squareGridElement: HTMLElement = document.getElementById("square-grid")!;
 const hexagonGridElement = document.getElementById("hexagon-grid")!;
+const algorithmSelector = document.getElementById("algorithm-selector")!;
 
 let activeGridType: GridType = GridType.Square;
 let squareGrid: IGrid;
@@ -42,6 +46,8 @@ function initControls(): void {
 
   gridTypeToggleButton = document.getElementById("grid-type-toggle-btn") as HTMLButtonElement;
   gridTypeToggleButton.addEventListener("click", onGridTypeToggleButtonClick);
+
+  algorithmSelector.addEventListener("select", onAlgorithmSelected);
 }
 
 function onVisualizeButtonClick() {
@@ -109,4 +115,8 @@ function onGridTypeToggleButtonClick() {
   }
 
   gridTypeToggleButton.innerHTML = newBtnText;
+}
+
+function onAlgorithmSelected(data: any) {
+  console.log(data.detail);
 }

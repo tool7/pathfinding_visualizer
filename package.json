@@ -6,7 +6,7 @@
   "scripts": {
     "webpack:watch": "webpack --watch",
     "prod:build": "webpack -p",
-    "dev:server": "cd dist & live-server --host=localhost --entry-file=index.html",
+    "dev:server": "cd dist & live-server --host=localhost --port=1200 --entry-file=index.html",
     "dev": "npm-run-all -p webpack:watch dev:server"
   },
   "repository": {
