@@ -7,46 +7,14 @@
 @import "layout/navbar";
 @import "layout/footer";
 
+@import "components/controls";
 @import "components/square-grid";
 @import "components/hexagon-grid";
 
 #app-container {
-  height: 100vh;
+  height: 92vh;
 }
 
 #grid-container {
-  height: 100%;
-}
-
-#visualize-toggle-btn {
-  height: 4rem;
-  width: 12rem;
-  color: whitesmoke;
-
-  &.start {
-    background-color: green;
-  }
-
-  &.cancel {
-    background-color: orangered;
-  }
-}
-
-#clear-walls-btn {
-  height: 4rem;
-  width: 12rem;
-  color: whitesmoke;
-  background-color: lightseagreen;
-}
-
-#grid-type-toggle-btn {
-  height: 4rem;
-  width: 16rem;
-  color: whitesmoke;
-  background-color: grey;
-}
-
-#algorithm-selector {
-  position: absolute;
-  margin-left: 2rem;
+  height: 92%;
 }

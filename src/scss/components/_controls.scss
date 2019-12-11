@@ -1,0 +1,43 @@
+#controls-container {
+  height: 8%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  & > * {
+    margin: 0 1rem 0 1rem;
+    opacity: .9;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+#visualize-toggle-btn {
+  height: 4rem;
+  width: 16rem;
+  color: whitesmoke;
+
+  &.start {
+    background-color: $color-green;
+  }
+
+  &.cancel {
+    background-color: $color-red;
+  }
+}
+
+#clear-walls-btn {
+  height: 4rem;
+  width: 12rem;
+  color: whitesmoke;
+  background-color: $color-dark-grey;
+}
+
+#grid-type-toggle-btn {
+  height: 4rem;
+  width: 20rem;
+  color: whitesmoke;
+  background-color: $color-light-blue;
+}

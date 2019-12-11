@@ -7,13 +7,19 @@ class Dropdown extends HTMLElement {
 
   constructor() {
     super();
+    
+    const backgroundColor = this.getAttribute("bg-color");
+    const textColor = this.getAttribute("txt-color");
+    const itemHoverBackgroundColor = this.getAttribute("item-hover-bg-color");
+    const itemHoverTextColor = this.getAttribute("item-hover-txt-color") || "#ffffff";
 
     this.shadowDom = this.attachShadow({ mode: "open" });
     this.shadowDom.innerHTML = `
       <style>
         #dropdown-menu {
+          position: relative;
           font-family: Consolas;
-          width: 24rem;
+          width: 26rem;
           display: block;
           background-color: transparent;
           user-select: none;
@@ -26,11 +32,13 @@ class Dropdown extends HTMLElement {
         .dropdown-menu__head {
           display: flex;
           align-items: center;
-          background-color: lightskyblue;
+          background-color: ${backgroundColor};
         }
 
         .dropdown-menu__body {
-          background-color: lightskyblue;
+          position: absolute;
+          width: 100%;
+          background-color: ${backgroundColor};
         }
     
         .dropdown-menu__head,
@@ -53,11 +61,11 @@ class Dropdown extends HTMLElement {
           max-height: 20rem;
           overflow-y: scroll;
           overflow-x: hidden;
-          border-top: 1px solid black;
+          margin-top: .5rem;
         }
     
         .selected-text {
-          color: black;
+          color: ${textColor};
           height: 3rem;
           overflow: hidden;
           text-overflow: ellipsis;
@@ -67,21 +75,23 @@ class Dropdown extends HTMLElement {
     
         .selected-text,
         ::slotted(.menu-option) {
-          font-size: 1.4rem;
+          font-size: 1.5rem;
         }
     
         ::slotted(.menu-option) {
-          color: black;
+          color: ${textColor};
           position: relative;
           padding: .5rem 0 .5rem 1.5rem !important;
           display: flex;
           align-items: center;
-          transition: background-color .1s linear, color .1s linear;
+          transition: padding .1s ease-in-out, background-color .1s linear, color .1s linear;
         }
     
         ::slotted(.menu-option:hover) {
           cursor: pointer;
-          background-color: mediumaquamarine;
+          padding-left: 1.8rem !important;
+          background-color: ${itemHoverBackgroundColor};
+          color: ${itemHoverTextColor};
         }
     
         .dropdown-menu__body::-webkit-scrollbar {
@@ -95,7 +105,7 @@ class Dropdown extends HTMLElement {
         }
     
         .dropdown-menu__body::-webkit-scrollbar-track {
-          background-color: lightskyblue;
+          background-color: ${backgroundColor};
         }
       </style>
     
@@ -114,9 +124,9 @@ class Dropdown extends HTMLElement {
     this.headElement = menu.getElementsByClassName("dropdown-menu__head")[0] as HTMLElement;
     this.bodyElement = menu.getElementsByClassName("dropdown-menu__body")[0] as HTMLElement;
     this.selectedTextElement = menu.getElementsByClassName("selected-text")[0] as HTMLElement;
-    this.collapseIconElement = menu.getElementsByClassName("collapse-icon")[0] as HTMLElement;
+    this.collapseIconElement = menu.getElementsByClassName("collapse-icon")[0] as HTMLElement; 
   }
- 
+
   connectedCallback() {
     this.close();
     this.setInitialValue();
@@ -124,8 +134,8 @@ class Dropdown extends HTMLElement {
   }
 
   private setInitialValue(): void {
-    const initialValue = this.getAttribute("initial-value");
-    if (!initialValue) { return; }
+    const initialSelectedValue = this.getAttribute("selected-value");
+    if (!initialSelectedValue) { return; }
 
     const onSlotChange = (e: Event) => {
       const slot: any = e.target;
@@ -135,7 +145,7 @@ class Dropdown extends HTMLElement {
         valueTextMap[el.dataset.value] = el.textContent;
       });
       
-      this.selectedTextElement.textContent = valueTextMap[initialValue] || "Choose item";
+      this.selectedTextElement.textContent = valueTextMap[initialSelectedValue] || "Choose item";
       this.shadowDom.removeEventListener("slotchange", onSlotChange);
     };
 

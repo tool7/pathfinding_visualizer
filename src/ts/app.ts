@@ -116,7 +116,7 @@ function onGridTypeToggleButtonClick() {
     case GridType.Square:
       squareGridElement.classList.remove("active");
       hexagonGridElement.classList.add("active");
-      newBtnText = "Switch to square grid";
+      newBtnText = "Switch to <b>square</b> grid";
 
       appState.activeGridType = GridType.Hexagon;
       break;
@@ -124,7 +124,7 @@ function onGridTypeToggleButtonClick() {
     case GridType.Hexagon:
       hexagonGridElement.classList.remove("active");
       squareGridElement.classList.add("active");
-      newBtnText = "Switch to hexagon grid";
+      newBtnText = "Switch to <b>hexagon</b> grid";
 
       appState.activeGridType = GridType.Square;
       break;

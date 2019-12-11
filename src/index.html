@@ -9,22 +9,29 @@
 </head>
 <body>
   <nav class="navbar">
-    <h2>Pathfinding</h2>
+    <h4>Pathfinding Visualizer</h4>
   </nav>
 
   <div id="app-container">
-    <button id="visualize-toggle-btn" class="start">Visualize</button>
+    <div id="controls-container">
+      <button id="visualize-toggle-btn" class="start">Visualize</button>
 
-    <button id="clear-walls-btn">Clear wall tiles</button>
+      <drop-down
+        id="algorithm-selector"
+        selected-value="dijkstra"
+        bg-color="#e68a00"
+        txt-color="#ffffff"
+        item-hover-bg-color="#cc6600">
+        <div class="menu-option" data-value="bfs">Breadth-first search</div>
+        <div class="menu-option" data-value="gbfs">Greedy best-first search</div>
+        <div class="menu-option" data-value="dijkstra">Dijkstra's algorithm</div>
+        <div class="menu-option" data-value="astar">A* search</div>
+      </drop-down>
 
-    <button id="grid-type-toggle-btn">Switch to hexagon grid</button>
+      <button id="grid-type-toggle-btn">Switch to <b>hexagon</b> grid</button>
 
-    <drop-down id="algorithm-selector" initial-value="dijkstra">
-      <div class="menu-option" data-value="bfs">Breadth-first search</div>
-      <div class="menu-option" data-value="gbfs">Greedy best-first search</div>
-      <div class="menu-option" data-value="dijkstra">Dijkstra's algorithm</div>
-      <div class="menu-option" data-value="astar">A* search</div>
-    </drop-down>
+      <button id="clear-walls-btn">Clear walls</button>
+    </div>
 
     <div id="grid-container">
       <table id="square-grid" class="active"></table>
