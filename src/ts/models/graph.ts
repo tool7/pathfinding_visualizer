@@ -5,6 +5,7 @@ interface Node {
   x: number;
   y: number;
   isWall: boolean;
+  weight: number;
 }
 
 abstract class Graph {
@@ -87,7 +88,8 @@ abstract class Graph {
 class WeightedGraph extends Graph {
 
   cost(fromNode: Node, toNode: Node): number {
-    return 1;
+    // 1 is used as default Node weight
+    return 1 + fromNode.weight + toNode.weight;
   }
 }
 

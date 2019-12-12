@@ -17,7 +17,7 @@ $hexagon-inner-scale: 0.95;
 
 .hexagon-tile {
   &--start {
-    fill: green;
+    fill: #1c53eb;
   }
 
   &--goal {
@@ -32,13 +32,24 @@ $hexagon-inner-scale: 0.95;
 
   &--wall {
     fill: #333333;
+    stroke: lightgrey;
+    stroke-width: 1px;
     animation-name: wallTileAnimation;
     animation-duration: .2s;
     animation-timing-function: ease-out;
   }
 
+  &--weighted {
+    fill: green;
+    stroke: lightgrey;
+    stroke-width: 1px;
+    animation-name: weightedTileAnimation;
+    animation-duration: .2s;
+    animation-timing-function: ease-out;
+  }
+
   &--visited {
-    fill: yellowgreen;
+    fill: #36ebd9;
     stroke: whitesmoke;
     stroke-width: 1px;
     animation-name: visitedTileAnimation;
@@ -47,27 +58,11 @@ $hexagon-inner-scale: 0.95;
   }
 
   &--path {
-    fill: cornflowerblue;
+    fill: #f2d830;
+    stroke: whitesmoke;
+    stroke-width: 1px;
     animation-name: pathTileAnimation;
     animation-duration: .2s;
     animation-timing-function: ease-out;
   }
-}
-
-@keyframes wallTileAnimation {
-  0% { transform: scale(0); }
-  75% { transform: scale(1.1); }
-  100% { transform: scale(1); }
-}
-
-@keyframes visitedTileAnimation {
-  0% { transform: scale(0); }
-  75% { transform: scale(1.1); }
-  100% { transform: scale(1); }
-}
-
-@keyframes pathTileAnimation {
-  0% { transform: scale(0); }
-  75% { transform: scale(1.1); }
-  100% { transform: scale(1); }
 }

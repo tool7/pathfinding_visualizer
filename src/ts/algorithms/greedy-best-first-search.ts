@@ -1,6 +1,6 @@
-import { WeightedGraph, Node, PriorityQueue, HashMap, PathfindingResult } from "../models";
+import { Graph, Node, PriorityQueue, HashMap, PathfindingResult } from "../models";
 
-function greedyBestFirstSearch(graph: WeightedGraph, start: Node, goal: Node, heuristicFunction: (nodeA: Node, nodeB: Node) => number): PathfindingResult {
+function greedyBestFirstSearch(graph: Graph, start: Node, goal: Node, heuristicFunction: (nodeA: Node, nodeB: Node) => number): PathfindingResult {
   let frontier = new PriorityQueue<Node>();
   let cameFrom = new HashMap();
   let visited: Node[] = [];

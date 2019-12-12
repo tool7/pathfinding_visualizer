@@ -10,7 +10,7 @@
 
 .square-tile {
   &--start {
-    background-color: green;
+    background-color: #1c53eb;
   }
 
   &--goal {
@@ -23,13 +23,22 @@
 
   &--wall {
     background-color: #333333;
+    border: 1px solid lightgrey;
     animation-name: wallTileAnimation;
     animation-duration: .2s;
     animation-timing-function: ease-out;
   }
 
+  &--weighted {
+    background-color: green;
+    border: 1px solid lightgrey;
+    animation-name: weightedTileAnimation;
+    animation-duration: .2s;
+    animation-timing-function: ease-out;
+  }
+
   &--visited {
-    background-color: yellowgreen;
+    background-color: #36ebd9;
     border: 1px solid whitesmoke;
     animation-name: visitedTileAnimation;
     animation-duration: .5s;
@@ -37,27 +46,10 @@
   }
 
   &--path {
-    background-color: cornflowerblue;
+    background-color: #f2d830;
+    border: 1px solid whitesmoke;
     animation-name: pathTileAnimation;
     animation-duration: .2s;
     animation-timing-function: ease-out;
   }
-}
-
-@keyframes wallTileAnimation {
-  0% { transform: scale(0); }
-  75% { transform: scale(1.1); }
-  100% { transform: scale(1); }
-}
-
-@keyframes visitedTileAnimation {
-  0% { transform: scale(0); }
-  75% { transform: scale(1.1); }
-  100% { transform: scale(1); }
-}
-
-@keyframes pathTileAnimation {
-  0% { transform: scale(0); }
-  75% { transform: scale(1.1); }
-  100% { transform: scale(1); }
 }

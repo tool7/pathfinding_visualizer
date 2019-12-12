@@ -68,8 +68,8 @@ function findPathBySelectedAlgorithm(graph: WeightedGraph, start: Node, goal: No
 
 function onVisualizeButtonClick() {
   if (visualizeToggleButton!.classList.contains("cancel")) {
-    Visualizer.clear(squareGrid);
-    Visualizer.clear(hexagonGrid);
+    Visualizer.reset(squareGrid);
+    Visualizer.reset(hexagonGrid);
 
     visualizeToggleButton!.innerHTML = "Visualize";
     visualizeToggleButton!.className = "start";
@@ -80,8 +80,8 @@ function onVisualizeButtonClick() {
 
   switch (appState.activeGridType) {
     case GridType.Square:
-      start = { x: squareGrid.startTile!.x, y: squareGrid.startTile!.y, isWall: false };
-      goal = { x: squareGrid.goalTile!.x, y: squareGrid.goalTile!.y, isWall: false };
+      start = { x: squareGrid.startTile!.x, y: squareGrid.startTile!.y, isWall: false, weight: 0 };
+      goal = { x: squareGrid.goalTile!.x, y: squareGrid.goalTile!.y, isWall: false, weight: 0 };
 
       graph = new WeightedGraph(squareGrid);
       searchResult = findPathBySelectedAlgorithm(graph, start, goal, squareGridHeuristic);
@@ -90,8 +90,8 @@ function onVisualizeButtonClick() {
       break;
 
     case GridType.Hexagon:
-      start = { x: hexagonGrid.startTile!.x, y: hexagonGrid.startTile!.y, isWall: false };
-      goal = { x: hexagonGrid.goalTile!.x, y: hexagonGrid.goalTile!.y, isWall: false };
+      start = { x: hexagonGrid.startTile!.x, y: hexagonGrid.startTile!.y, isWall: false, weight: 0 };
+      goal = { x: hexagonGrid.goalTile!.x, y: hexagonGrid.goalTile!.y, isWall: false, weight: 0 };
       
       graph = new WeightedGraph(hexagonGrid);
       searchResult = findPathBySelectedAlgorithm(graph, start, goal, hexagonGridHeuristic);

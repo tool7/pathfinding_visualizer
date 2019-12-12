@@ -11,7 +11,14 @@ class Visualizer {
   private static _isRunning: boolean = false;
   private static _intervalId: number;
 
-  private static simulateTiles(nodeQueue: Queue<Node>, grid: IGrid, newTileState: TileState, simulationStepDelay: number, completeCallback?: () => void) {
+  private static simulateTiles(
+    nodeQueue: Queue<Node>,
+    grid: IGrid,
+    newTileState: TileState,
+    simulationStepDelay: number,
+    completeCallback?: () => void,
+    passThroughWeightedTiles: boolean = false) {
+
     Visualizer._intervalId = setInterval(() => {
       const nextNode = nodeQueue.dequeue();
 
@@ -30,7 +37,8 @@ class Visualizer {
         tile = grid.tiles[i][j];
       }
 
-      if (tile.state === TileState.Start || tile.state === TileState.Goal) {
+      if ([TileState.Start, TileState.Goal].includes(tile.state) ||
+          (tile.state === TileState.Weighted && !passThroughWeightedTiles)) {
         return;
       }
 
@@ -50,11 +58,11 @@ class Visualizer {
     Visualizer.simulateTiles(visitedQueue, grid, TileState.Visited, simulationStepDelay, () => {
       Visualizer.simulateTiles(pathQueue, grid, TileState.Path, 40, () => {
         Visualizer._isRunning = false;
-      });
+      }, true);
     });
   }
 
-  static clear(grid: IGrid) {
+  static reset(grid: IGrid) {
     clearInterval(Visualizer._intervalId);
     Visualizer._isRunning = false;
 
@@ -62,7 +70,7 @@ class Visualizer {
       for (let j = 0; j < grid.verticalCount; j++) {
         const tile = grid.tiles[i][j];
 
-        if ([TileState.Wall, TileState.Start, TileState.Goal].includes(tile.state)) {
+        if ([TileState.Start, TileState.Goal, TileState.Wall, TileState.Weighted].includes(tile.state)) {
           continue;
         }
   

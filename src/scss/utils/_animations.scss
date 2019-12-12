@@ -1,0 +1,23 @@
+@keyframes weightedTileAnimation {
+  0% { transform: scale(0); }
+  75% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+@keyframes wallTileAnimation {
+  0% { transform: scale(0); }
+  75% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+@keyframes visitedTileAnimation {
+  0% { transform: scale(0); opacity: .5; }
+  75% { transform: scale(1.1); opacity: .75; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes pathTileAnimation {
+  0% { transform: scale(0); }
+  75% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
