@@ -1,5 +1,8 @@
 import Visualizer from "../visualizer";
-import { Node } from "./graph";
+import { Node, WeightedGraph } from "./graph";
+import { squareGridHeuristic } from "../config/algorithm-config";
+import { PathfindingResult } from ".";
+import { aStarSearch } from "../algorithms";
 
 enum TileState {
   Start,
@@ -35,8 +38,7 @@ interface IGrid {
   verticalCount: number;
 }
 
-abstract class BaseGrid implements IGrid {
-
+abstract class BaseGrid extends EventTarget implements IGrid {
   abstract type: GridType;
   protected grabbedTileState: TileState | null = null;
   protected isShiftKeyPressed: boolean = false;
@@ -49,6 +51,8 @@ abstract class BaseGrid implements IGrid {
   verticalCount: number;
   
   constructor(parent: HTMLElement, horizontalCount: number, verticalCount: number) {
+    super();
+
     this.parent = parent;
     this.horizontalCount = horizontalCount;
     this.verticalCount = verticalCount;
@@ -78,7 +82,7 @@ abstract class BaseGrid implements IGrid {
   protected onTileMouseDown(e: MouseEvent, tile: Tile) {
     e.preventDefault();
 
-    if (Visualizer.isRunning) { return; }
+    if (Visualizer.isSimulationRunning) { return; }
 
     this.grabbedTileState = tile.state;
 
@@ -89,6 +93,7 @@ abstract class BaseGrid implements IGrid {
     }
 
     this.setTileStateByGrabbedTileState(tile);
+    this.dispatchEvent(new CustomEvent("change"));
   }
 
   protected onTileMouseOver(tile: Tile) {
@@ -102,6 +107,7 @@ abstract class BaseGrid implements IGrid {
       this.setTileState(tile, TileState.Start);
 
       this.startTile = tile;
+      this.dispatchEvent(new CustomEvent("change"));
       return;
     }
 
@@ -110,10 +116,12 @@ abstract class BaseGrid implements IGrid {
       this.setTileState(tile, TileState.Goal);
 
       this.goalTile = tile;
+      this.dispatchEvent(new CustomEvent("change"));
       return;
     }
 
     this.setTileStateByGrabbedTileState(tile);
+    this.dispatchEvent(new CustomEvent("change"));
   }
 
   protected setTileStateByGrabbedTileState(tile: Tile) {
@@ -185,7 +193,7 @@ abstract class BaseGrid implements IGrid {
   }
 
   clearWallTiles() {
-    if (Visualizer.isRunning) { return; }
+    if (Visualizer.isSimulationRunning) { return; }
 
     for (let i = 0; i < this.horizontalCount; i++) {
       for (let j = 0; j < this.verticalCount; j++) {

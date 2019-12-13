@@ -4,7 +4,7 @@ import { SQUARE_TILE_SIZE, HEXAGON_TILE_WIDTH } from "./config/grid-config";
 import { squareGridHeuristic, hexagonGridHeuristic } from "./config/algorithm-config";
 
 import { breadthFirstSearch, dijkstraAlgorithm, greedyBestFirstSearch, aStarSearch } from "./algorithms";
-import { WeightedGraph, IGrid, SquareGrid, HexagonGrid, GridType, Node, PathfindingResult } from "./models";
+import { WeightedGraph, SquareGrid, HexagonGrid, GridType, Node, PathfindingResult } from "./models";
 
 import Visualizer from "./visualizer";
 
@@ -15,11 +15,12 @@ const algorithmSelector = document.getElementById("algorithm-selector")!;
 
 const appState = {
   activeGridType: GridType.Square,
-  selectedAlgorithm: "dijkstra"
+  selectedAlgorithm: "dijkstra",
+  isSimulationActivated: false
 };
 
-let squareGrid: IGrid;
-let hexagonGrid: IGrid;
+let squareGrid: SquareGrid;
+let hexagonGrid: HexagonGrid;
 let visualizeToggleButton: HTMLButtonElement;
 let clearWallsButton: HTMLButtonElement;
 let gridTypeToggleButton: HTMLButtonElement;
@@ -32,12 +33,34 @@ function initSquareGrid(): void {
   const xAxisTileCount = Math.floor(gridContainer.clientWidth / SQUARE_TILE_SIZE);
   const yAxisTileCount = Math.floor(gridContainer.clientHeight / SQUARE_TILE_SIZE);
   squareGrid = new SquareGrid(squareGridElement, xAxisTileCount, yAxisTileCount);
+
+  squareGrid.addEventListener("change", () => {
+    if (Visualizer.isSimulationRunning || !appState.isSimulationActivated) { return; }
+
+    const start = { x: squareGrid.startTile!.x, y: squareGrid.startTile!.y, isWall: false, weight: 0 };
+    const goal = { x: squareGrid.goalTile!.x, y: squareGrid.goalTile!.y, isWall: false, weight: 0 };
+    const graph = new WeightedGraph(squareGrid);
+    const searchResult = findPathBySelectedAlgorithm(graph, start, goal, squareGridHeuristic);
+
+    searchResult && Visualizer.showShortestPath(squareGrid, searchResult);
+  });
 }
 
 function initHexagonGrid(): void {
   const xAxisTileCount = Math.floor(gridContainer.clientWidth / HEXAGON_TILE_WIDTH);
   const yAxisTileCount = Math.floor(gridContainer.clientHeight / HEXAGON_TILE_WIDTH);
   hexagonGrid = new HexagonGrid(hexagonGridElement, xAxisTileCount, yAxisTileCount);
+
+  hexagonGrid.addEventListener("change", () => {
+    if (Visualizer.isSimulationRunning || !appState.isSimulationActivated) { return; }
+
+    const start = { x: hexagonGrid.startTile!.x, y: hexagonGrid.startTile!.y, isWall: false, weight: 0 };
+    const goal = { x: hexagonGrid.goalTile!.x, y: hexagonGrid.goalTile!.y, isWall: false, weight: 0 };
+    const graph = new WeightedGraph(hexagonGrid);
+    const searchResult = findPathBySelectedAlgorithm(graph, start, goal, hexagonGridHeuristic);
+
+    searchResult && Visualizer.showShortestPath(hexagonGrid, searchResult);
+  });
 }
 
 function initControls(): void {
@@ -73,8 +96,12 @@ function onVisualizeButtonClick() {
 
     visualizeToggleButton!.innerHTML = "Visualize";
     visualizeToggleButton!.className = "start";
+
+    appState.isSimulationActivated = false;
     return;
   }
+
+  appState.isSimulationActivated = true;
 
   let start, goal, graph, searchResult;
 
@@ -100,7 +127,7 @@ function onVisualizeButtonClick() {
       break;
   }
 
-  visualizeToggleButton!.innerHTML = "Cancel simulation";
+  visualizeToggleButton!.innerHTML = "Cancel visualization";
   visualizeToggleButton!.className = "cancel";
 }
 
