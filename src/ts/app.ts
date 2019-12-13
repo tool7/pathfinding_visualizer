@@ -1,11 +1,8 @@
 import "./components/dropdown";
 
 import { SQUARE_TILE_SIZE, HEXAGON_TILE_WIDTH } from "./config/grid-config";
-import { squareGridHeuristic, hexagonGridHeuristic } from "./config/algorithm-config";
-
-import { breadthFirstSearch, dijkstraAlgorithm, greedyBestFirstSearch, aStarSearch } from "./algorithms";
-import { WeightedGraph, SquareGrid, HexagonGrid, GridType, Node, PathfindingResult } from "./models";
-
+import { searchShortestPath } from "./helpers/algorithm-helper";
+import { SquareGrid, HexagonGrid, GridType } from "./models";
 import Visualizer from "./visualizer";
 
 const gridContainer: HTMLElement = document.getElementById("grid-container")!;
@@ -16,7 +13,7 @@ const algorithmSelector = document.getElementById("algorithm-selector")!;
 const appState = {
   activeGridType: GridType.Square,
   selectedAlgorithm: "dijkstra",
-  isSimulationActivated: false
+  isVisualizerActivated: false
 };
 
 let squareGrid: SquareGrid;
@@ -35,13 +32,9 @@ function initSquareGrid(): void {
   squareGrid = new SquareGrid(squareGridElement, xAxisTileCount, yAxisTileCount);
 
   squareGrid.addEventListener("change", () => {
-    if (Visualizer.isSimulationRunning || !appState.isSimulationActivated) { return; }
+    if (Visualizer.isSimulationRunning || !appState.isVisualizerActivated) { return; }
 
-    const start = { x: squareGrid.startTile!.x, y: squareGrid.startTile!.y, isWall: false, weight: 0 };
-    const goal = { x: squareGrid.goalTile!.x, y: squareGrid.goalTile!.y, isWall: false, weight: 0 };
-    const graph = new WeightedGraph(squareGrid);
-    const searchResult = findPathBySelectedAlgorithm(graph, start, goal, squareGridHeuristic);
-
+    const searchResult = searchShortestPath(squareGrid, appState.selectedAlgorithm, GridType.Square);
     searchResult && Visualizer.showShortestPath(squareGrid, searchResult);
   });
 }
@@ -52,13 +45,9 @@ function initHexagonGrid(): void {
   hexagonGrid = new HexagonGrid(hexagonGridElement, xAxisTileCount, yAxisTileCount);
 
   hexagonGrid.addEventListener("change", () => {
-    if (Visualizer.isSimulationRunning || !appState.isSimulationActivated) { return; }
+    if (Visualizer.isSimulationRunning || !appState.isVisualizerActivated) { return; }
 
-    const start = { x: hexagonGrid.startTile!.x, y: hexagonGrid.startTile!.y, isWall: false, weight: 0 };
-    const goal = { x: hexagonGrid.goalTile!.x, y: hexagonGrid.goalTile!.y, isWall: false, weight: 0 };
-    const graph = new WeightedGraph(hexagonGrid);
-    const searchResult = findPathBySelectedAlgorithm(graph, start, goal, hexagonGridHeuristic);
-
+    const searchResult = searchShortestPath(hexagonGrid, appState.selectedAlgorithm, GridType.Hexagon);
     searchResult && Visualizer.showShortestPath(hexagonGrid, searchResult);
   });
 }
@@ -76,19 +65,6 @@ function initControls(): void {
   algorithmSelector.addEventListener("select", onAlgorithmSelected);
 }
 
-function findPathBySelectedAlgorithm(graph: WeightedGraph, start: Node, goal: Node, heuristicFunction: (a: Node, b: Node) => number): PathfindingResult | void {
-  switch (appState.selectedAlgorithm) {
-    case "bfs":
-      return breadthFirstSearch(graph, start, goal);
-    case "gbfs":
-      return greedyBestFirstSearch(graph, start, goal, heuristicFunction);
-    case "dijkstra":
-      return dijkstraAlgorithm(graph, start, goal);
-    case "astar":
-      return aStarSearch(graph, start, goal, heuristicFunction);
-  }
-}
-
 function onVisualizeButtonClick() {
   if (visualizeToggleButton!.classList.contains("cancel")) {
     Visualizer.reset(squareGrid);
@@ -97,32 +73,22 @@ function onVisualizeButtonClick() {
     visualizeToggleButton!.innerHTML = "Visualize";
     visualizeToggleButton!.className = "start";
 
-    appState.isSimulationActivated = false;
+    appState.isVisualizerActivated = false;
     return;
   }
 
-  appState.isSimulationActivated = true;
+  appState.isVisualizerActivated = true;
 
-  let start, goal, graph, searchResult;
+  let searchResult;
 
   switch (appState.activeGridType) {
     case GridType.Square:
-      start = { x: squareGrid.startTile!.x, y: squareGrid.startTile!.y, isWall: false, weight: 0 };
-      goal = { x: squareGrid.goalTile!.x, y: squareGrid.goalTile!.y, isWall: false, weight: 0 };
-
-      graph = new WeightedGraph(squareGrid);
-      searchResult = findPathBySelectedAlgorithm(graph, start, goal, squareGridHeuristic);
-
+      searchResult = searchShortestPath(squareGrid, appState.selectedAlgorithm, GridType.Square);
       searchResult && Visualizer.simulate(squareGrid, searchResult, 10);
       break;
 
     case GridType.Hexagon:
-      start = { x: hexagonGrid.startTile!.x, y: hexagonGrid.startTile!.y, isWall: false, weight: 0 };
-      goal = { x: hexagonGrid.goalTile!.x, y: hexagonGrid.goalTile!.y, isWall: false, weight: 0 };
-      
-      graph = new WeightedGraph(hexagonGrid);
-      searchResult = findPathBySelectedAlgorithm(graph, start, goal, hexagonGridHeuristic);
-
+      searchResult = searchShortestPath(hexagonGrid, appState.selectedAlgorithm, GridType.Hexagon);
       searchResult && Visualizer.simulate(hexagonGrid, searchResult, 10);
       break;
   }
