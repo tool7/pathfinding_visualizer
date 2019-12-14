@@ -1,5 +1,6 @@
-import Visualizer from "../visualizer";
+import { WEIGHTED_NODE_WEIGHT, DEFAULT_NODE_WEIGHT } from "../config/graph-config";
 import { Node, WeightedGraph } from "./graph";
+import Visualizer from "../visualizer";
 import { squareGridHeuristic } from "../config/algorithm-config";
 import { PathfindingResult } from ".";
 import { aStarSearch } from "../algorithms";
@@ -215,7 +216,7 @@ abstract class BaseGrid extends EventTarget implements IGrid {
       for (let j = 0; j < this.verticalCount; j++) {
         const tile = this.tiles[i][j];
         const isWall = tile.state === TileState.Wall;
-        const weight = tile.state === TileState.Weighted ? 0.5 : 0;
+        const weight = tile.state === TileState.Weighted ? WEIGHTED_NODE_WEIGHT : 0;
 
         nodes[i][j] = { x: tile.x, y: tile.y, isWall, weight };
       }

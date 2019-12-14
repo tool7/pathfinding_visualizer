@@ -88,7 +88,6 @@ abstract class Graph {
 class WeightedGraph extends Graph {
 
   cost(fromNode: Node, toNode: Node): number {
-    // 1 is used as default Node weight
     return 1 + fromNode.weight + toNode.weight;
   }
 }

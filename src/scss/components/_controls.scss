@@ -12,6 +12,15 @@
       opacity: 1;
     }
   }
+
+  & > span {
+    display: flex;
+    align-items: center;
+    height: 4rem;
+    border: 1px dotted black;
+    padding: 1rem;
+    font-size: $font-size-sm;
+  }
 }
 
 #visualize-toggle-btn {
