@@ -1,4 +1,4 @@
-import { WEIGHTED_NODE_WEIGHT, DEFAULT_NODE_WEIGHT } from "../config/graph-config";
+import { WEIGHTED_NODE_WEIGHT } from "../config/graph-config";
 import { Node, WeightedGraph } from "./graph";
 import Visualizer from "../visualizer";
 import { squareGridHeuristic } from "../config/algorithm-config";
