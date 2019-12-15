@@ -59,7 +59,7 @@ class Visualizer {
     const pathQueue = new Queue<Node>(pathfindingResult.path);
 
     Visualizer.simulateTiles(visitedQueue, grid, TileState.Visited, simulationStepDelay, () => {
-      Visualizer.simulateTiles(pathQueue, grid, TileState.Path, 40, () => {
+      Visualizer.simulateTiles(pathQueue, grid, TileState.Path, 35, () => {
         Visualizer._isSimulationRunning = false;
       }, true);
     });

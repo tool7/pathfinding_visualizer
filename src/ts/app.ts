@@ -1,3 +1,11 @@
+/*
+  TODO:
+  - remove 'Weighted' from TileState enum
+  - make 'Weighted a tile type
+  - instead of showing green tile, use green tree icon to indicate that tile is weighted
+
+*/
+
 import "./components/dropdown";
 
 import { SQUARE_TILE_SIZE, HEXAGON_TILE_WIDTH } from "./config/grid-config";
@@ -9,10 +17,12 @@ const gridContainer: HTMLElement = document.getElementById("grid-container")!;
 const squareGridElement: HTMLElement = document.getElementById("square-grid")!;
 const hexagonGridElement = document.getElementById("hexagon-grid")!;
 const algorithmSelector = document.getElementById("algorithm-selector")!;
+const simulationDelaySelector = document.getElementById("simulation-delay-selector")!;
 
 const appState = {
   activeGridType: GridType.Square,
   selectedAlgorithm: "dijkstra",
+  selectedSimulationDelay: 30,
   isVisualizerActivated: false
 };
 
@@ -63,6 +73,7 @@ function initControls(): void {
   gridTypeToggleButton.addEventListener("click", onGridTypeToggleButtonClick);
 
   algorithmSelector.addEventListener("select", onAlgorithmSelected);
+  simulationDelaySelector.addEventListener("select", onSimulationDelaySelected)
 }
 
 function onVisualizeButtonClick() {
@@ -84,12 +95,12 @@ function onVisualizeButtonClick() {
   switch (appState.activeGridType) {
     case GridType.Square:
       searchResult = searchShortestPath(squareGrid, appState.selectedAlgorithm, GridType.Square);
-      searchResult && Visualizer.simulate(squareGrid, searchResult, 10);
+      searchResult && Visualizer.simulate(squareGrid, searchResult, appState.selectedSimulationDelay);
       break;
 
     case GridType.Hexagon:
       searchResult = searchShortestPath(hexagonGrid, appState.selectedAlgorithm, GridType.Hexagon);
-      searchResult && Visualizer.simulate(hexagonGrid, searchResult, 10);
+      searchResult && Visualizer.simulate(hexagonGrid, searchResult, appState.selectedSimulationDelay);
       break;
   }
 
@@ -128,4 +139,8 @@ function onGridTypeToggleButtonClick() {
 
 function onAlgorithmSelected(e: any) {
   appState.selectedAlgorithm = e.detail;
+}
+
+function onSimulationDelaySelected(e: any) {
+  appState.selectedSimulationDelay = +e.detail;
 }

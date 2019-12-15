@@ -4,10 +4,12 @@ class Dropdown extends HTMLElement {
   bodyElement: HTMLElement;
   selectedTextElement: HTMLElement;
   collapseIconElement: HTMLElement;
+  menuOptionElements: HTMLElement[] = [];
 
   constructor() {
     super();
     
+    const width = this.getAttribute("width");
     const backgroundColor = this.getAttribute("bg-color");
     const textColor = this.getAttribute("txt-color");
     const itemHoverBackgroundColor = this.getAttribute("item-hover-bg-color");
@@ -19,7 +21,7 @@ class Dropdown extends HTMLElement {
         #dropdown-menu {
           position: relative;
           font-family: Consolas;
-          width: 26rem;
+          width: ${width};
           display: block;
           background-color: transparent;
           user-select: none;
@@ -87,7 +89,7 @@ class Dropdown extends HTMLElement {
           transition: padding .1s ease-in-out, background-color .1s linear, color .1s linear;
         }
     
-        ::slotted(.menu-option:hover) {
+        ::slotted(.menu-option:hover), ::slotted(.menu-option.selected) {
           cursor: pointer;
           padding-left: 1.8rem !important;
           background-color: ${itemHoverBackgroundColor};
@@ -95,7 +97,7 @@ class Dropdown extends HTMLElement {
         }
     
         .dropdown-menu__body::-webkit-scrollbar {
-          width: 0rem;
+          width: 0;
         }
     
         .dropdown-menu__body::-webkit-scrollbar-thumb {
@@ -142,7 +144,14 @@ class Dropdown extends HTMLElement {
 
       let valueTextMap: any = {};
       slot.assignedElements().forEach((el: any) => {
+        const dataValue = el.dataset.value;
         valueTextMap[el.dataset.value] = el.textContent;
+
+        if (dataValue === initialSelectedValue) {
+          el.classList.add("selected");
+        }
+
+        this.menuOptionElements?.push(el);
       });
       
       this.selectedTextElement.textContent = valueTextMap[initialSelectedValue] || "Choose item";
@@ -164,10 +173,19 @@ class Dropdown extends HTMLElement {
     this.bodyElement.addEventListener("click", e => {
       const target: any = e.target;
       if (target && target !== e.currentTarget) {
+        const dataValue = target.dataset.value;
         this.selectedTextElement.textContent = target.textContent;
 
+        this.menuOptionElements.forEach((menuOptionEl: HTMLElement) => {
+          menuOptionEl.classList.remove("selected");
+
+          if (menuOptionEl.dataset.value === dataValue) {
+            menuOptionEl.classList.add("selected");
+          }
+        });
+
         this.dispatchEvent(new CustomEvent("select", {
-          detail: target.dataset.value
+          detail: dataValue
         }));
       }
 

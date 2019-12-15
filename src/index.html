@@ -19,6 +19,7 @@
       <drop-down
         id="algorithm-selector"
         selected-value="dijkstra"
+        width="26rem"
         bg-color="#e68a00"
         txt-color="#ffffff"
         item-hover-bg-color="#cc6600">
@@ -26,6 +27,20 @@
         <div class="menu-option" data-value="gbfs">Greedy best-first search</div>
         <div class="menu-option" data-value="dijkstra">Dijkstra's algorithm</div>
         <div class="menu-option" data-value="astar">A* search</div>
+      </drop-down>
+
+      <drop-down
+        id="simulation-delay-selector"
+        selected-value="15"
+        width="20rem"
+        bg-color="#7e49c9"
+        txt-color="#ffffff"
+        item-hover-bg-color="#6933b5">
+        <div class="menu-option" data-value="5">Very fast</div>
+        <div class="menu-option" data-value="15">Fast</div>
+        <div class="menu-option" data-value="50">Medium</div>
+        <div class="menu-option" data-value="100">Slow</div>
+        <div class="menu-option" data-value="200">Very slow</div>
       </drop-down>
 
       <button id="grid-type-toggle-btn">Switch to <b>hexagon</b> grid</button>
