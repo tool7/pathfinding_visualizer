@@ -30,11 +30,12 @@
   }
 
   &--weighted {
-    background-color: green;
-    border: 1px solid lightgrey;
     animation-name: weightedTileAnimation;
     animation-duration: .2s;
     animation-timing-function: ease-out;
+    background-image: url("C:/Users/TooL7/Documents/tool7/projects/pathfinding_visualizer/dist/assets/icon-tree.svg");
+    background-repeat: no-repeat;
+    background-position: center;
   }
 
   &--visited {

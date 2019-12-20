@@ -18,7 +18,7 @@ function findPathBySelectedAlgorithm(algorithmName: string, graph: WeightedGraph
 export function searchShortestPath(grid: IGrid, algorithmName: string, gridType: GridType): PathfindingResult | void {
   const start: Node = { x: grid.startTile!.x, y: grid.startTile!.y, isWall: false, weight: 0 };
   const goal = { x: grid.goalTile!.x, y: grid.goalTile!.y, isWall: false, weight: 0 };
-  const graph = new WeightedGraph(grid);
+  const graph = new WeightedGraph(grid, gridType);
 
   const heuristicFunction = gridType === GridType.Square ? squareGridHeuristic : hexagonGridHeuristic;
   const searchResult = findPathBySelectedAlgorithm(algorithmName, graph, start, goal, heuristicFunction);

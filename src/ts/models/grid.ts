@@ -1,15 +1,11 @@
 import { WEIGHTED_NODE_WEIGHT } from "../config/graph-config";
-import { Node, WeightedGraph } from "./graph";
+import { Node } from "./graph";
 import Visualizer from "../visualizer";
-import { squareGridHeuristic } from "../config/algorithm-config";
-import { PathfindingResult } from ".";
-import { aStarSearch } from "../algorithms";
 
 enum TileState {
   Start,
   Goal,
   Wall,
-  Weighted,
   Unvisited,
   Visited,
   Path,
@@ -20,6 +16,7 @@ interface Tile {
   y: number;
   state: TileState;
   htmlEl: HTMLElement | SVGElement;
+  isWeighted: boolean
 }
 
 enum GridType {
@@ -28,11 +25,11 @@ enum GridType {
 }
 
 interface IGrid {
-  type: GridType;
   tiles: Tile[][];
   startTile: Tile | null;
   goalTile: Tile | null;
   setTileState: (t: Tile, s: TileState) => void;
+  updateTileStyle: (t: Tile) => void;
   clearWallTiles: () => void;
   mapTilesToGraphNodes: () => Node[][];
   horizontalCount: number;
@@ -40,7 +37,6 @@ interface IGrid {
 }
 
 abstract class BaseGrid extends EventTarget implements IGrid {
-  abstract type: GridType;
   protected grabbedTileState: TileState | null = null;
   protected isShiftKeyPressed: boolean = false;
   
@@ -50,6 +46,7 @@ abstract class BaseGrid extends EventTarget implements IGrid {
   goalTile: Tile | null = null;
   horizontalCount: number;
   verticalCount: number;
+  abstract updateTileStyle(t: Tile): void;
   
   constructor(parent: HTMLElement, horizontalCount: number, verticalCount: number) {
     super();
@@ -93,7 +90,7 @@ abstract class BaseGrid extends EventTarget implements IGrid {
       return;
     }
 
-    this.setTileStateByGrabbedTileState(tile);
+    this.handleGrabbedTile(tile);
     this.dispatchEvent(new CustomEvent("change"));
   }
 
@@ -121,25 +118,28 @@ abstract class BaseGrid extends EventTarget implements IGrid {
       return;
     }
 
-    this.setTileStateByGrabbedTileState(tile);
+    this.handleGrabbedTile(tile);
     this.dispatchEvent(new CustomEvent("change"));
   }
 
-  protected setTileStateByGrabbedTileState(tile: Tile) {
+  protected handleGrabbedTile(tile: Tile) {
+    if (this.isShiftKeyPressed && ![TileState.Start, TileState.Goal, TileState.Wall].includes(tile.state)) {
+      tile.isWeighted = true;
+      this.updateTileStyle(tile);
+      return;
+    }
+
     let newState = null;
 
-    if (this.isShiftKeyPressed) {
-      newState = TileState.Weighted;
-    } else {
-      switch (this.grabbedTileState) {
-        case TileState.Wall:
-          newState = TileState.Unvisited;
-          break;
-        default:
-          newState = TileState.Wall;
-          break;
-      }
+    switch (this.grabbedTileState) {
+      case TileState.Wall:
+        newState = TileState.Unvisited;
+        break;
+      default:
+        newState = TileState.Wall;
+        break;
     }
+
     this.setTileState(tile, newState);
   }
 
@@ -161,36 +161,7 @@ abstract class BaseGrid extends EventTarget implements IGrid {
 
   setTileState(tile: Tile, newState: TileState) {
     tile.state = newState;
-
-    while (tile.htmlEl.classList.length !== 0) {
-      tile.htmlEl.classList.remove(tile.htmlEl.classList[0]);
-    }
-
-    let classPrefix = this.type === GridType.Square ? "square" : "hexagon";
-
-    switch (newState) {
-      case TileState.Wall:
-        tile.htmlEl.classList.add(`${classPrefix}-tile--wall`);
-        break;
-      case TileState.Weighted:
-          tile.htmlEl.classList.add(`${classPrefix}-tile--weighted`);
-          break;
-      case TileState.Visited:
-        tile.htmlEl.classList.add(`${classPrefix}-tile--visited`);
-        break;
-      case TileState.Unvisited:
-        tile.htmlEl.classList.add(`${classPrefix}-tile--unvisited`);
-        break;
-      case TileState.Start:
-        tile.htmlEl.classList.add(`${classPrefix}-tile--start`);
-        break;
-      case TileState.Goal:
-        tile.htmlEl.classList.add(`${classPrefix}-tile--goal`);
-        break;
-      case TileState.Path:
-        tile.htmlEl.classList.add(`${classPrefix}-tile--path`);
-        break;
-    }
+    this.updateTileStyle(tile);
   }
 
   clearWallTiles() {
@@ -200,7 +171,21 @@ abstract class BaseGrid extends EventTarget implements IGrid {
       for (let j = 0; j < this.verticalCount; j++) {
         const tile = this.tiles[i][j];
 
-        if ([TileState.Wall, TileState.Weighted].includes(tile.state)) {
+        if (tile.state === TileState.Wall) {
+          this.setTileState(tile, TileState.Unvisited);
+        }
+      }
+    }
+  }
+
+  clearWeightedTiles() {
+    if (Visualizer.isSimulationRunning) { return; }
+
+    for (let i = 0; i < this.horizontalCount; i++) {
+      for (let j = 0; j < this.verticalCount; j++) {
+        const tile = this.tiles[i][j];
+
+        if (tile.isWeighted) {
           this.setTileState(tile, TileState.Unvisited);
         }
       }
@@ -216,7 +201,7 @@ abstract class BaseGrid extends EventTarget implements IGrid {
       for (let j = 0; j < this.verticalCount; j++) {
         const tile = this.tiles[i][j];
         const isWall = tile.state === TileState.Wall;
-        const weight = tile.state === TileState.Weighted ? WEIGHTED_NODE_WEIGHT : 0;
+        const weight = tile.isWeighted ? WEIGHTED_NODE_WEIGHT : 0;
 
         nodes[i][j] = { x: tile.x, y: tile.y, isWall, weight };
       }

@@ -15,11 +15,11 @@ abstract class Graph {
   height: number;
   gridType: GridType;
 
-  constructor(grid: IGrid) {
+  constructor(grid: IGrid, gridType: GridType) {
     this.nodes = grid.mapTilesToGraphNodes();
     this.width = grid.horizontalCount;
     this.height = grid.verticalCount;
-    this.gridType = grid.type;
+    this.gridType = gridType;
   }
 
   private squareGridNeighbors(node: Node): Node[] {

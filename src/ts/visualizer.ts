@@ -11,7 +11,7 @@ class Visualizer {
   private static _isSimulationRunning: boolean = false;
   private static _intervalId: number;
 
-  private static setTileStateByNodeCoordinates(grid: IGrid, node: Node, state: TileState, passThroughWeightedTiles: boolean) {
+  private static setTileStateByNodeCoordinates(grid: IGrid, node: Node, state: TileState) {
     let tile: Tile | null = null;
 
     if (grid instanceof SquareGrid) {
@@ -21,22 +21,14 @@ class Visualizer {
       tile = grid.tiles[i][j];
     }
 
-    if (!tile || [TileState.Start, TileState.Goal].includes(tile.state) ||
-        (tile.state === TileState.Weighted && !passThroughWeightedTiles)) {
+    if (!tile || [TileState.Start, TileState.Goal].includes(tile.state)) {
       return;
     }
 
     grid.setTileState(tile, state);
   }
 
-  private static simulateTiles(
-    nodeQueue: Queue<Node>,
-    grid: IGrid,
-    newTileState: TileState,
-    simulationStepDelay: number,
-    completeCallback?: () => void,
-    passThroughWeightedTiles: boolean = false) {
-
+  private static simulateTiles(nodeQueue: Queue<Node>, grid: IGrid, newTileState: TileState, simulationStepDelay: number, completeCallback?: () => void) {
     Visualizer._intervalId = setInterval(() => {
       const nextNode = nodeQueue.dequeue();
 
@@ -46,7 +38,7 @@ class Visualizer {
         return;
       }
 
-      this.setTileStateByNodeCoordinates(grid, nextNode, newTileState, passThroughWeightedTiles);
+      this.setTileStateByNodeCoordinates(grid, nextNode, newTileState);
     }, simulationStepDelay);
   }
 
@@ -61,19 +53,19 @@ class Visualizer {
     Visualizer.simulateTiles(visitedQueue, grid, TileState.Visited, simulationStepDelay, () => {
       Visualizer.simulateTiles(pathQueue, grid, TileState.Path, 35, () => {
         Visualizer._isSimulationRunning = false;
-      }, true);
+      });
     });
   }
 
-  static showShortestPath(grid: IGrid, pathfindingResult: PathfindingResult, passThroughWeightedTiles: boolean = false) {
+  static showShortestPath(grid: IGrid, pathfindingResult: PathfindingResult) {
     this.reset(grid);
 
     pathfindingResult.visited.forEach((visitedNode: Node) => {
-      this.setTileStateByNodeCoordinates(grid, visitedNode, TileState.Visited, passThroughWeightedTiles);
+      this.setTileStateByNodeCoordinates(grid, visitedNode, TileState.Visited);
     });
 
     pathfindingResult.path.forEach((pathNode: Node) => {
-      this.setTileStateByNodeCoordinates(grid, pathNode, TileState.Path, passThroughWeightedTiles);
+      this.setTileStateByNodeCoordinates(grid, pathNode, TileState.Path);
     });
   }
 
@@ -85,7 +77,7 @@ class Visualizer {
       for (let j = 0; j < grid.verticalCount; j++) {
         const tile = grid.tiles[i][j];
 
-        if ([TileState.Start, TileState.Goal, TileState.Wall, TileState.Weighted].includes(tile.state)) {
+        if ([TileState.Start, TileState.Goal, TileState.Wall].includes(tile.state)) {
           continue;
         }
   

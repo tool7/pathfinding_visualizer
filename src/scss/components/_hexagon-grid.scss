@@ -40,12 +40,14 @@ $hexagon-inner-scale: 0.95;
   }
 
   &--weighted {
-    fill: green;
-    stroke: lightgrey;
-    stroke-width: 1px;
+    position: relative;
     animation-name: weightedTileAnimation;
     animation-duration: .2s;
     animation-timing-function: ease-out;
+    pointer-events: none;
+    background-image: url("C:/Users/TooL7/Documents/tool7/projects/pathfinding_visualizer/dist/assets/icon-tree.svg");
+    background-repeat: no-repeat;
+    background-position: center;
   }
 
   &--visited {
