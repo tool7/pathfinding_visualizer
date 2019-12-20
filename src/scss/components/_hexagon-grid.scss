@@ -40,11 +40,11 @@ $hexagon-inner-scale: 0.95;
   }
 
   &--weighted {
-    position: relative;
     animation-name: weightedTileAnimation;
     animation-duration: .2s;
     animation-timing-function: ease-out;
     pointer-events: none;
+    // TODO: Implement relative URLs
     background-image: url("C:/Users/TooL7/Documents/tool7/projects/pathfinding_visualizer/dist/assets/icon-tree.svg");
     background-repeat: no-repeat;
     background-position: center;

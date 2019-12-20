@@ -30,6 +30,7 @@ let squareGrid: SquareGrid;
 let hexagonGrid: HexagonGrid;
 let visualizeToggleButton: HTMLButtonElement;
 let clearWallsButton: HTMLButtonElement;
+let clearWeightedTilesButton: HTMLButtonElement;
 let gridTypeToggleButton: HTMLButtonElement;
 
 initSquareGrid();
@@ -68,6 +69,9 @@ function initControls(): void {
 
   clearWallsButton = document.getElementById("clear-walls-btn") as HTMLButtonElement;
   clearWallsButton.addEventListener("click", onClearWallsButtonClick);
+
+  clearWeightedTilesButton = document.getElementById("clear-weighted-tiles-btn") as HTMLButtonElement;
+  clearWeightedTilesButton.addEventListener("click", onClearWeightedTilesButtonClick);
 
   gridTypeToggleButton = document.getElementById("grid-type-toggle-btn") as HTMLButtonElement;
   gridTypeToggleButton.addEventListener("click", onGridTypeToggleButtonClick);
@@ -111,6 +115,11 @@ function onVisualizeButtonClick() {
 function onClearWallsButtonClick() {
   squareGrid.clearWallTiles();
   hexagonGrid.clearWallTiles();
+}
+
+function onClearWeightedTilesButtonClick() {
+  squareGrid.clearWeightedTiles();
+  hexagonGrid.clearWeightedTiles();
 }
 
 function onGridTypeToggleButtonClick() {

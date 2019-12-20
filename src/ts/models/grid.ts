@@ -186,7 +186,8 @@ abstract class BaseGrid extends EventTarget implements IGrid {
         const tile = this.tiles[i][j];
 
         if (tile.isWeighted) {
-          this.setTileState(tile, TileState.Unvisited);
+          tile.isWeighted = false;
+          this.updateTileStyle(tile);
         }
       }
     }

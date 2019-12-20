@@ -16,10 +16,11 @@
   & > span {
     display: flex;
     align-items: center;
-    height: 4rem;
+    height: 5rem;
     border: 1px dotted black;
-    padding: 1rem;
+    padding: 2rem;
     font-size: $font-size-sm;
+    text-align: center;
   }
 }
 
@@ -37,7 +38,7 @@
   }
 }
 
-#clear-walls-btn {
+#clear-walls-btn, #clear-weighted-tiles-btn {
   height: 4rem;
   width: 12rem;
   color: whitesmoke;
