@@ -24,15 +24,15 @@ abstract class Graph {
 
   private squareGridNeighbors(node: Node): Node[] {
     let result: Node[] = [];
-
-    if (this.isInBounds(node.x + 1, node.y)) {
-      result.push(this.nodes[node.x + 1][node.y]);
-    }
+    
     if (this.isInBounds(node.x - 1, node.y)) {
       result.push(this.nodes[node.x - 1][node.y]);
     }
     if (this.isInBounds(node.x, node.y + 1)) {
       result.push(this.nodes[node.x][node.y + 1]);
+    }
+    if (this.isInBounds(node.x + 1, node.y)) {
+      result.push(this.nodes[node.x + 1][node.y]);
     }
     if (this.isInBounds(node.x, node.y - 1)) {
       result.push(this.nodes[node.x][node.y - 1]);
@@ -43,7 +43,7 @@ abstract class Graph {
   }
 
   private hexagonGridNeighbors(node: Node): Node[] {
-    const axialDirections = [[+1, 0], [+1, -1], [0, -1], [-1, 0], [-1, +1], [0, +1]];
+    const axialDirections = [[+1, -1], [-1, +1], [0, +1], [-1, 0], [+1, 0], [0, -1]];
     let result: Node[] = [];
 
     axialDirections.forEach(direction => {
