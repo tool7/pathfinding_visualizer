@@ -1,11 +1,13 @@
 import { IGrid, WeightedGraph, Node, PathfindingResult, GridType } from "../models";
 import { squareGridHeuristic, hexagonGridHeuristic } from "../config/algorithm-config";
-import { breadthFirstSearch, dijkstraAlgorithm, greedyBestFirstSearch, aStarSearch } from "../algorithms";
+import { breadthFirstSearch, depthFirstSearch, dijkstraAlgorithm, greedyBestFirstSearch, aStarSearch } from "../algorithms";
 
 function findPathBySelectedAlgorithm(algorithmName: string, graph: WeightedGraph, start: Node, goal: Node, heuristicFunction: (a: Node, b: Node) => number): PathfindingResult | void {
   switch (algorithmName) {
     case "bfs":
       return breadthFirstSearch(graph, start, goal);
+    case "dfs":
+      return depthFirstSearch(graph, start, goal);
     case "gbfs":
       return greedyBestFirstSearch(graph, start, goal, heuristicFunction);
     case "dijkstra":

@@ -12,7 +12,7 @@ function breadthFirstSearch(graph: Graph, start: Node, goal: Node): PathfindingR
   while (!frontier.isEmpty()) {
     const current = frontier.dequeue();
 
-    // Adding to visited array only because of visualization
+    // Adding to visited array because of visualization
     visited.push(current);
 
     if (graph.areEqual(current, goal)) { break; }

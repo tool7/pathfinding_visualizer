@@ -1,30 +1,26 @@
-import { Graph, Node, PriorityQueue, HashMap, PathfindingResult } from "../models";
+import { Graph, Node, Stack, HashMap, PathfindingResult } from "../models";
 
-function greedyBestFirstSearch(graph: Graph, start: Node, goal: Node, heuristicFunction: (nodeA: Node, nodeB: Node) => number): PathfindingResult {
-  let frontier = new PriorityQueue<Node>();
+function depthFirstSearch(graph: Graph, start: Node, goal: Node): PathfindingResult {
+  let frontier = new Stack<Node>();
   let cameFrom = new HashMap();
   let visited: Node[] = [];
   let path: Node[] = [];
 
-  frontier.enqueue(start, 0);
+  frontier.push(start);
   cameFrom.set(start, null);
 
   while (!frontier.isEmpty()) {
-    const current = frontier.dequeue();
-
-    // Adding to visited array because of visualization
+    const current = frontier.pop();
     visited.push(current);
 
     if (graph.areEqual(current, goal)) { break; }
 
     graph.neighbors(current).forEach((next: any) => {
       // Checking if it is already visited node
-      if (cameFrom.contains(next)) { return; }
-
+      if (visited.includes(next)) { return; }
+      
+      frontier.push(next);
       cameFrom.set(next, current);
-
-      const priority = heuristicFunction(next, goal);
-      frontier.enqueue(next, priority);
     });
   }
 
@@ -39,4 +35,4 @@ function greedyBestFirstSearch(graph: Graph, start: Node, goal: Node, heuristicF
   return { path, visited };
 }
 
-export default greedyBestFirstSearch;
+export default depthFirstSearch;

@@ -6,6 +6,7 @@ import HashMap from "./hash-map";
 import PathfindingResult from "./pathfinding-result";
 import PriorityQueue from "./priority-queue";
 import Queue from "./queue";
+import Stack from "./stack";
 
 export {
   Graph,
@@ -20,6 +21,7 @@ export {
   PathfindingResult,
   PriorityQueue,
   Queue,
+  Stack,
   HexagonGrid,
   SquareGrid
 };

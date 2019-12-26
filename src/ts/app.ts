@@ -1,11 +1,3 @@
-/*
-  TODO:
-  - remove 'Weighted' from TileState enum
-  - make 'Weighted a tile type
-  - instead of showing green tile, use green tree icon to indicate that tile is weighted
-
-*/
-
 import "./components/dropdown";
 
 import { SQUARE_TILE_SIZE, HEXAGON_TILE_WIDTH } from "./config/grid-config";
