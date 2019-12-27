@@ -1,3 +1,5 @@
+// JS array is basically a stack but I use Stack class
+// for better naming and algorithm's code understanding
 export default class Stack<T> {
 
   elements: T[];
