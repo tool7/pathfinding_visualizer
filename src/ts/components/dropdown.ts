@@ -114,7 +114,7 @@ class Dropdown extends HTMLElement {
       <div id="dropdown-menu">
         <div class="dropdown-menu__head">
           <div class="selected-text"></div>
-          <img class="collapse-icon" src="./assets/icon-arrow-down.svg"">
+          <img class="collapse-icon" src="./assets/icon-arrow-down.svg">
         </div>
         <div class="dropdown-menu__body">
           <slot></slot>
